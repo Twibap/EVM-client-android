@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- AppTheme -->
+    <color name="colorPrimary">#C99D66</color>
+    <color name="colorPrimaryDark">#A4763C</color>
+    <color name="colorAccent">#3C3C3D</color>
+    <color name="colorControlNormal">#232323</color>
+    <color name="colorControlHighlight">#7f4383</color>
+
+    <color name="colorPrimaryDarker">#7D5119</color>
+    <color name="colorControlNormalDarker">#040404</color>
+
+    <!-- AppTheme.Dark -->
+    <!--<color name="colorPrimary">#3C3C3D</color>-->
+    <!--<color name="colorPrimaryDark">#232323</color>-->
+    <!--<color name="colorAccent">#C99D66</color>-->
+    <!--<color name="colorControlNormal">#A4763C</color>-->
+    <!--<color name="colorControlHighlight">#7f4383</color>-->
+
+    <!--<color name="colorPrimaryDarker">#040404</color>-->
+    <!--<color name="colorControlNormalDarker">#7D5119</color>-->
+
+
+    <color name="colorBackground">#EBF0F1</color>
+</resources>

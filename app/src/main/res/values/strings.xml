@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">EVM - Ethereum Vending Machine</string>
+
+    <string name="price10000">₩ 11,000</string>
+    <string name="price20000">₩ 22,000</string>
+    <string name="price30000">₩ 33,000</string>
+    <string name="price50000">₩ 55,000</string>
+    <string name="price100000">₩ 110,000</string>
+
+    <string name="value10000">11000</string>
+    <string name="value20000">22000</string>
+    <string name="value30000">33000</string>
+    <string name="value50000">55000</string>
+    <string name="value100000">110000</string>
+
+    <string name="addressFieldHint">이더리움 주소</string>
+    <string name="err_msg_address">올바른 이더리움 주소를 입력하세요.</string>
+    <string name="err_msg_check_address">입력한 주소를 다시 확인하세요.</string>
+    <string name="btAddressEnter">확  인</string>
+    <string name="AddressSaveCheckMsg">주소를 저장할까요?</string>
+    <string name="logo">Logo</string>
+    <string name="action_showAddress">주소 보기</string>
+    <string name="menu_text_action_account">주소 변경</string>
+
+</resources>
