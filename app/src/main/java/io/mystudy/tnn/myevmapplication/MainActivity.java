@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         btGroup = findViewById(R.id.chooseGroup);
         btBuy = findViewById(R.id.buttonBuy);
 
-        viewPrice = findViewById(R.id.textView2);
+        viewPrice = findViewById(R.id.viewEtherPrice);
 
         btGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
