@@ -16,10 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
+import io.mystudy.tnn.myevmapplication.websocket.PriceListener;
 import kr.co.bootpay.Bootpay;
 import kr.co.bootpay.BootpayAnalytics;
 import kr.co.bootpay.CancelListener;
@@ -29,6 +31,9 @@ import kr.co.bootpay.DoneListener;
 import kr.co.bootpay.ErrorListener;
 import kr.co.bootpay.enums.Method;
 import kr.co.bootpay.enums.PG;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.WebSocket;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,11 +41,17 @@ public class MainActivity extends AppCompatActivity {
     private static final int codeMkAddress = 1001;
     private int stuck = 10;
 
-    RadioGroup btGroup;
-    Button btBuy;
+    private RadioGroup btGroup;
+    private Button btBuy;
 
+    private TextView viewPrice;
     private int price;
     private String account;
+
+    // WebSocket
+    private OkHttpClient httpClient;
+    private WebSocket webSocket;
+    private PriceListener priceListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +74,45 @@ public class MainActivity extends AppCompatActivity {
 
         // 초기설정 - 해당 프로젝트(안드로이드)의 application id 값을 설정합니다. 결제와 통계를 위해 꼭 필요합니다.
         BootpayAnalytics.init(this, "5bddbed2b6d49c480275bab1");
+
+        // WebSocket
+        httpClient = new OkHttpClient();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Request request = new Request.Builder()
+                .url( getString( R.string.url_price_websocket ) )
+                .build();
+        priceListener= new PriceListener() {
+            @Override
+            public void showMessage(final PriceListener.Price price) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPrice.setText( "￦ "+price.getEvm_price()+" / Ether" );
+                    }
+                });
+            }
+        };
+        webSocket = httpClient.newWebSocket(request, priceListener);
+        httpClient.dispatcher().executorService().shutdown();
+    }
+
+    @Override
+    protected void onStop() {
+        webSocket.close(PriceListener.NORMAL_CLOSURE_STATUS, TAG+" - onStop");
+
+        super.onStop();
     }
 
     void viewInit(){
         btGroup = findViewById(R.id.chooseGroup);
         btBuy = findViewById(R.id.buttonBuy);
+
+        viewPrice = findViewById(R.id.textView2);
 
         btGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
