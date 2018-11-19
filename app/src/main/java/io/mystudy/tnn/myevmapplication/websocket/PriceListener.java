@@ -52,12 +52,12 @@ public abstract class PriceListener extends WebSocketListener {
 
     public abstract void showMessage(Price text);
 
-    protected class Price{
-        private String id;
+    public class Price{
+        private String _id;
         private int   evm_price;
 
         public String getId() {
-            return id;
+            return _id;
         }
         public int getEvm_price() {
             return evm_price;
