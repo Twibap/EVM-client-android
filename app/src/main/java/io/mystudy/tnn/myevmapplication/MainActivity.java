@@ -81,8 +81,6 @@ public class MainActivity extends AppCompatActivity {
         // 초기설정 - 해당 프로젝트(안드로이드)의 application id 값을 설정합니다. 결제와 통계를 위해 꼭 필요합니다.
         BootpayAnalytics.init(this, "5bddbed2b6d49c480275bab1");
 
-        // WebSocket
-        httpClient = new OkHttpClient();
     }
 
     @Override
@@ -104,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         };
+        // WebSocket
+        httpClient = new OkHttpClient();
         webSocket = httpClient.newWebSocket(request, priceListener);
         httpClient.dispatcher().executorService().shutdown();
     }
@@ -285,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
 //                            if (0 < stuck) Bootpay.confirm(message); // 재고가 있을 경우.
 //                            else Bootpay.removePaymentWindow(); // 재고가 없어 중간에 결제창을 닫고 싶을 경우
                             Log.d("confirm", message);
+                            Bootpay.confirm(message);   // TODO 재고 검토 후 confirm 할 것
                         }
                     })
                     .onDone(new DoneListener() { // 결제완료시 호출, 아이템 지급 등 데이터 동기화 로직을 수행합니다
