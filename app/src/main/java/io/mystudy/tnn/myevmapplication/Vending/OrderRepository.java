@@ -13,12 +13,10 @@ import okhttp3.Response;
 public class OrderRepository {
 
     // URL Const Vals
-    String SCHEME = "http";
-    String AUTHORITY = "172.16.5.66";
-    String PORT = "3000";
-    String PATH = "/order/askN";
+    private String SCHEME = "http";
+    private String AUTHORITY = "172.16.5.66";
+    private String PORT = "3000";
     // URI
-    String url = SCHEME+"://"+AUTHORITY+":"+PORT+PATH;
 //    Uri uri = new Uri.Builder()
 //            .scheme(SCHEME)
 //            .authority(AUTHORITY)
@@ -30,14 +28,17 @@ public class OrderRepository {
 //        public static final MediaType JSON
 //                = MediaType.parse("application/json; charset=utf-8");
 //        RequestBody body = RequestBody.create(JSON, order.toJson());  // error return null
+
+        String PATH = "/order/askN";
+
         RequestBody body = new FormBody.Builder()
                 .add("address", order.getAddress())
                 .add("amount", order.getAmountString())
                 .add("price_id", order.getPrice_id())
                 .build();
 
-        final Request request = new Request.Builder()
-                .url(url)
+        Request request = new Request.Builder()
+                .url( mkUrl(PATH) )
                 .post(body)
                 .build();
 
@@ -49,8 +50,34 @@ public class OrderRepository {
         return gson.fromJson(response.body().string(), Order.class);
     }
 
-    public void confirmOrder(){
+    public String verifyPayment(Bill bill) throws IOException {
 
+        String PATH = "/order/payment";
+
+        RequestBody body = new FormBody.Builder()
+                .add("receipt_id", bill.getReceipt_id())
+                .add("order_id", bill.getOrder_id())
+                .add("item_name", bill.getItem_name())
+                .add("price", bill.getAmountString())
+                .add("pg", bill.getPg())
+                .add("method", bill.getMethod())
+                .add("request_at", bill.getRequested_at())
+                .add("purchased_at", bill.getPurchased_at())
+                .build();
+
+        Request request = new Request.Builder()
+                .url( mkUrl( PATH ))
+                .post(body)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+
+        Response response = client.newCall(request).execute();
+
+        return response.body().string();
     }
 
+    private String mkUrl(String path){
+        return SCHEME+"://"+AUTHORITY+":"+PORT+path;
+    }
 }

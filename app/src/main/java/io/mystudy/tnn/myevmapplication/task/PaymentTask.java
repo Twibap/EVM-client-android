@@ -5,10 +5,13 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import io.mystudy.tnn.myevmapplication.MainActivity;
+import io.mystudy.tnn.myevmapplication.Vending.Bill;
 import io.mystudy.tnn.myevmapplication.Vending.Order;
 import io.mystudy.tnn.myevmapplication.Vending.OrderRepository;
 import kr.co.bootpay.Bootpay;
@@ -73,6 +76,12 @@ public class PaymentTask extends AsyncTask<Order, Order, Order>{
                     @Override
                     public void onDone(@Nullable String message) {
                         Log.d("done", message);
+                        Gson gson = new Gson();
+                        Bill bill = gson.fromJson(message, Bill.class);
+
+                        // 결제 정보 서버로 전송
+                        VerifyPaymentTask task = new VerifyPaymentTask();
+                        task.execute( bill );
                     }
                 })
                 .onCancel(new CancelListener() { // 결제 취소시 호출
