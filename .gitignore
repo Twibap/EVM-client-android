@@ -145,3 +145,6 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.gitignore.io/api/androidstudio
+
+# Project Confidential data
+app/src/main/java/io/mystudy/tnn/myevmapplication/Application/Confidential.java
