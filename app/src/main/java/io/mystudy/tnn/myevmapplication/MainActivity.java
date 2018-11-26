@@ -20,6 +20,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import io.mystudy.tnn.myevmapplication.Application.BaseApplication;
+import io.mystudy.tnn.myevmapplication.Application.Confidential;
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
 import io.mystudy.tnn.myevmapplication.Vending.Order;
 import io.mystudy.tnn.myevmapplication.task.PaymentTask;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         viewInit();
 
         // 초기설정 - 해당 프로젝트(안드로이드)의 application id 값을 설정합니다. 결제와 통계를 위해 꼭 필요합니다.
-        BootpayAnalytics.init(this, "5bddbed2b6d49c480275bab1");
+        BootpayAnalytics.init(this, Confidential.Bootpay_Application_ID);
 
         Dlog.e("MainActivity onCreated!");
 
