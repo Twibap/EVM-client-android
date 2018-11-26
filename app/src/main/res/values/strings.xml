@@ -2,7 +2,10 @@
     <string name="app_name">EVM - Ethereum Vending Machine</string>
 
     <!--<string name="url_price_websocket">ws://192.168.0.5:8080</string>-->
-    <string name="url_price_websocket">ws://172.16.5.85:8080</string>
+    <string name="url_price">172.16.7.241</string>
+    <string name="port_price">8080</string>
+    <string name="url_order">172.16.7.241</string>
+    <string name="port_order">3000</string>
 
     <string name="price10000">₩ 11,000</string>
     <string name="price20000">₩ 22,000</string>

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
+import io.mystudy.tnn.myevmapplication.Application.BaseApplication;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -11,18 +12,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class OrderRepository {
-
-    // URL Const Vals
-    private String SCHEME = "http";
-    private String AUTHORITY = "172.16.5.66";
-    private String PORT = "3000";
-    // URI
-//    Uri uri = new Uri.Builder()
-//            .scheme(SCHEME)
-//            .authority(AUTHORITY)
-//            .path(PATH)
-////            .appendQueryParameter("city", "130010")
-//            .build();
 
     public Order askOrder(final Order order) throws IOException {
 //        public static final MediaType JSON
@@ -78,6 +67,6 @@ public class OrderRepository {
     }
 
     private String mkUrl(String path){
-        return SCHEME+"://"+AUTHORITY+":"+PORT+path;
+        return BaseApplication.getHost_order() +path;
     }
 }

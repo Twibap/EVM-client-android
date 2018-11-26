@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import io.mystudy.tnn.myevmapplication.Application.BaseApplication;
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
 import io.mystudy.tnn.myevmapplication.Vending.Order;
 import io.mystudy.tnn.myevmapplication.task.PaymentTask;
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         // 초기설정 - 해당 프로젝트(안드로이드)의 application id 값을 설정합니다. 결제와 통계를 위해 꼭 필요합니다.
         BootpayAnalytics.init(this, "5bddbed2b6d49c480275bab1");
 
+        Dlog.e("MainActivity onCreated!");
+
     }
 
     @Override
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         Request request = new Request.Builder()
-                .url( getString( R.string.url_price_websocket ) )
+                .url( BaseApplication.getHost_price() )
                 .build();
         priceListener= new PriceListener() {
             @Override
