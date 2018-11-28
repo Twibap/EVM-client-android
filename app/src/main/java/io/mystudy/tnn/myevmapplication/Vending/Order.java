@@ -2,13 +2,16 @@ package io.mystudy.tnn.myevmapplication.Vending;
 
 import com.google.gson.Gson;
 
+import java.math.BigInteger;
+
 public class Order {
 
     private String _id;    // 주문번호
 
     private String address;    // 이더 구입 주소
-    private int amount;      // 구입 량 == xx,000 원
-    private String price_id;    // 구입 가격
+    private String amount_ether;      // 구입 이더 양 == 0.xxx 개
+    private int amount_payment;      // 구입 금액 == xx,000 원
+    private String price_id;    // 구입 이더 가격
     private String bill_id;     // 결제 정보
 
     public Order(String _address,
@@ -18,13 +21,13 @@ public class Order {
         this. _id = null;
 
         address = _address;
-        amount = _amount;
+        amount_payment = _amount;
         price_id = _price_id;
         bill_id = null;
     }
 
     public String itemName(){
-        return "Item"+amount;
+        return "Item"+amount_payment;
     }
 
     /* ====== Getter & Setter ============================================ */
@@ -40,9 +43,9 @@ public class Order {
     }
 
     public int getAmount() {
-        return amount;
+        return amount_payment;
     }
-    public String getAmountString(){ return String.valueOf( amount ); }
+    public String getAmountString(){ return String.valueOf( amount_payment ); }
 
     public String getPrice_id() {
         return price_id;
