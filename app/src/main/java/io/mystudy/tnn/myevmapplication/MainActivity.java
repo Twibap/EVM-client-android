@@ -58,11 +58,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar( toolbar );
 
         SharedPreferences sf = getSharedPreferences("Customer", MODE_PRIVATE);
-        if ( !sf.contains("account" )){
+        if( !sf.contains("account") ){
             Intent intent = new Intent(this, AccountActivity.class);
             startActivityForResult(intent, codeMkAddress);
         } else {
-            account = sf.getString("account", "Account Empty!!");
+            account = sf.getString("account", null);
         }
 
         viewInit();
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         Request request = new Request.Builder()
-                .url( BaseApplication.getHost_price() )
+                .url( BaseApplication.getHost_websocket() )
                 .build();
         priceListener= new PriceListener() {
             @Override
@@ -177,8 +177,15 @@ public class MainActivity extends AppCompatActivity {
             Dlog.e("onClick_request: Zero Price");
             return;
         }
+
+        SharedPreferences sf = getSharedPreferences("Customer", MODE_PRIVATE);
+        String token = null;
+        if(sf.contains("firebaseToken"))
+            token = sf.getString("firebaseToken", null);
+
+
         // 주문내용 생성
-        Order order = new Order(account, amount, price.getId());
+        Order order = new Order(account, token, amount, price.getId());
         Log.i(TAG, "onClick_request: order->"+order.toJson());
 
         // 주문번호 생성(서버 저장)
@@ -227,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode){
             case codeMkAddress:
                 account = data.getStringExtra("account");
+
                 Toast.makeText(this, account, Toast.LENGTH_SHORT).show();
                 break;
         }

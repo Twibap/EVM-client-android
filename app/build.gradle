@@ -38,7 +38,13 @@ dependencies {
     // for WebSocket
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 
-    // String to JSON
+    // for switch String and JSON
     implementation 'com.google.code.gson:gson:2.8.5'
 
+    // for getting http message from server
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+
 }
+
+// ADD THIS AT THE BOTTOM
+apply plugin: 'com.google.gms.google-services'

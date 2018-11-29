@@ -2,25 +2,26 @@ package io.mystudy.tnn.myevmapplication.Vending;
 
 import com.google.gson.Gson;
 
-import java.math.BigInteger;
-
 public class Order {
 
     private String _id;    // 주문번호
 
     private String address;    // 이더 구입 주소
+    private String token;      // FCM token
     private String amount_ether;      // 구입 이더 양 == 0.xxx 개
     private int amount_payment;      // 구입 금액 == xx,000 원
     private String price_id;    // 구입 이더 가격
     private String bill_id;     // 결제 정보
 
     public Order(String _address,
+                 String _token,
                  int _amount,
                  String _price_id){
 
         this. _id = null;
 
         address = _address;
+        token = _token;
         amount_payment = _amount;
         price_id = _price_id;
         bill_id = null;
@@ -61,5 +62,9 @@ public class Order {
     public String toJson(){
         Gson gson = new Gson();
         return gson.toJson(this);
+    }
+
+    public String getToken() {
+        return this.token;
     }
 }

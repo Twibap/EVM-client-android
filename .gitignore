@@ -148,3 +148,4 @@ fabric.properties
 
 # Project Confidential data
 app/src/main/java/io/mystudy/tnn/myevmapplication/Application/Confidential.java
+app/google-services.json

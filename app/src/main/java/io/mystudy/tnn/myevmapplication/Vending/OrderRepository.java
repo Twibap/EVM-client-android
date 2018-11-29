@@ -22,6 +22,7 @@ public class OrderRepository {
 
         RequestBody body = new FormBody.Builder()
                 .add("address", order.getAddress())
+                .add("token", order.getToken())
                 .add("amount", order.getAmountString())
                 .add("price_id", order.getPrice_id())
                 .build();
@@ -67,6 +68,6 @@ public class OrderRepository {
     }
 
     private String mkUrl(String path){
-        return BaseApplication.getHost_order() +path;
+        return BaseApplication.getHost_http() +path;
     }
 }
