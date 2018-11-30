@@ -9,6 +9,11 @@
     <string name="url_order">192.168.0.5</string>
     <string name="port_order">3000</string>
 
+    <string name="url_block_info">https://etherscan.io/block</string>
+    <string name="url_block_info_ropsten">https://ropsten.etherscan.io/block</string>
+    <string name="url_tx_info">https://etherscan.io/tx</string>
+    <string name="url_tx_info_ropsten">https://ropsten.etherscan.io/tx</string>
+
     <string name="price10000">₩ 11,000</string>
     <string name="price20000">₩ 22,000</string>
     <string name="price30000">₩ 33,000</string>
