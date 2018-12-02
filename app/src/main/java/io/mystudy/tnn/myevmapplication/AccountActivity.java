@@ -39,6 +39,8 @@ public class AccountActivity
     Button btQrScan;
     ImageView viewQrCode;
 
+    String address;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,15 +49,17 @@ public class AccountActivity
         initView();
 
         database = getSharedPreferences("Customer", MODE_PRIVATE);
+        if (database.contains("account"))
+            address = database.getString("account", null);
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus){
+        if (hasFocus && address != null){
 
             if (database.contains("account"))
-                addressField.setText( database.getString("account", null) );
+                addressField.setText( address );
         }
     }
 
@@ -193,7 +197,7 @@ public class AccountActivity
                     if ( !AddressUtils.isValidChecksumAddress(qrData))
                         qrData = AddressUtils.toChecksumAddress(qrData);
 
-                    addressField.setText(qrData);
+                    address = qrData;
                 } else {
                     Dlog.e("QR data is not Ethereum address");
                     Toast.makeText(this, R.string.err_qr_msg_address, Toast.LENGTH_SHORT).show();
