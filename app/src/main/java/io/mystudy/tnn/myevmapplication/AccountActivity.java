@@ -3,6 +3,7 @@ package io.mystudy.tnn.myevmapplication;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -14,7 +15,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
 
@@ -28,6 +36,9 @@ public class AccountActivity
     CheckBox checkBoxSaveAddr;
     SharedPreferences database;
 
+    Button btQrScan;
+    ImageView viewQrCode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +47,16 @@ public class AccountActivity
         initView();
 
         database = getSharedPreferences("Customer", MODE_PRIVATE);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus){
+
+            if (database.contains("account"))
+                addressField.setText( database.getString("account", null) );
+        }
     }
 
     private void initView(){
@@ -48,6 +69,10 @@ public class AccountActivity
 
         checkBoxSaveAddr = findViewById(R.id.checkBoxSaveAddress);
         checkBoxSaveAddr.setOnClickListener(this);
+
+        viewQrCode = findViewById(R.id.view_qr_code);
+        btQrScan = findViewById(R.id.buttonQrScanner);
+        btQrScan.setOnClickListener(this);
     }
 
     @Override
@@ -56,9 +81,17 @@ public class AccountActivity
             case R.id.buttonEnter:
                 enterAccount();
                 break;
+
             case R.id.checkBoxSaveAddress:
                 if(database.contains("account"))
                     askOverwrite();
+                break;
+
+            case R.id.buttonQrScanner:
+                new IntentIntegrator(this)
+                        .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+                        .setBeepEnabled(false)
+                        .initiateScan();
                 break;
         }
     }
@@ -138,6 +171,40 @@ public class AccountActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Dlog.d("QR contents : "+ result.getContents());
+                Dlog.d("QR img path : "+ result.getBarcodeImagePath());
+                Dlog.d("QR format name : "+ result.getFormatName());
+                Dlog.d("QR toString : "+ result.toString());
+
+                String qrData = result.getContents();
+
+                // QR 코드로 입력된 주소는 기본 주소 양식만 검사한다.
+                if ( AddressUtils.isValidAddress(qrData) ){
+                    Toast.makeText(this, "Scanned", Toast.LENGTH_LONG).show();
+
+                    // Checksum 되지 않은 주소는 Checksum 한다.
+                    if ( !AddressUtils.isValidChecksumAddress(qrData))
+                        qrData = AddressUtils.toChecksumAddress(qrData);
+
+                    addressField.setText(qrData);
+                } else {
+                    Dlog.e("QR data is not Ethereum address");
+                    Toast.makeText(this, R.string.err_qr_msg_address, Toast.LENGTH_SHORT).show();
+                }
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public void finish() {
         if( !database.contains("account") && !getIntent().hasExtra("account")) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
@@ -170,7 +237,30 @@ public class AccountActivity
 
         @Override
         public void afterTextChanged(Editable editable) {
-            validateAddress(editable.toString());
+            if ( validateAddress(editable.toString()) ){
+                try {
+                    String address = editable.toString();
+                    BarcodeEncoder encoder = new BarcodeEncoder();
+
+                    int view_width = viewQrCode.getWidth();
+                    int view_height = viewQrCode.getHeight();
+                    Dlog.e("Encode address : "+address);
+                    Dlog.e("QR width  : "+view_width);
+                    Dlog.e("QR height : "+view_height);
+
+                    Bitmap qrCode = encoder.encodeBitmap(
+                            address, BarcodeFormat.QR_CODE,
+                            view_width, view_height);
+//                    400, 400);
+//                            viewQrCode.getMaxWidth(), viewQrCode.getMaxHeight());
+                    viewQrCode.setImageBitmap( qrCode );
+
+                } catch (WriterException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                viewQrCode.setImageResource(R.drawable.logo_ethereum);
+            }
         }
     }
 }

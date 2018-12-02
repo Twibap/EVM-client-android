@@ -44,6 +44,9 @@ dependencies {
     // for getting http message from server
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
 
+    // for QR code scan
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+
 }
 
 // ADD THIS AT THE BOTTOM

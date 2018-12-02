@@ -23,7 +23,7 @@ class AddressUtils {
     }
 
     // Account Checksum 변환
-    private static String toChecksumAddress(String address){
+    static String toChecksumAddress(String address){
         Dlog.d("toChecksumAddress: source -> "+address);
         Log.d(TAG, "toChecksumAddress: source -> "+address);
         address = address.toLowerCase();

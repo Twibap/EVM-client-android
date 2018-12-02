@@ -9,9 +9,11 @@
     >
 
 <android.support.constraint.ConstraintLayout
+    android:id="@+id/view_activity_address"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:focusableInTouchMode="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -25,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2">
+        app:layout_constraintTop_toBottomOf="@+id/view_qr_code">
 
         <EditText
             android:id="@+id/editAddress"
@@ -51,10 +53,11 @@
         app:layout_constraintTop_toBottomOf="@+id/checkBoxSaveAddress"/>
 
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/view_qr_code"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginTop="48dp"
+        android:layout_marginBottom="24dp"
         android:contentDescription="@string/logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,5 +74,16 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editAddressLayout"/>
+
+    <Button
+        android:id="@+id/buttonQrScanner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="QR"
+        app:layout_constraintStart_toStartOf="@+id/checkBoxSaveAddress"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxSaveAddress"/>
+
 </android.support.constraint.ConstraintLayout>
 </ScrollView>
