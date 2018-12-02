@@ -1,12 +1,10 @@
 package io.mystudy.tnn.myevmapplication;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -204,19 +202,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_account:
-                AlertDialog.Builder builder
-                        = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
-                builder.setTitle("Ethereum Account")
-                        .setMessage(account)
-                        .setPositiveButton("바꾸기", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Intent intent = new Intent(MainActivity.this, AccountActivity.class);
-                                startActivityForResult(intent, codeMkAddress);
-                            }
-                        })
-                        .setNegativeButton("닫기", null)
-                        .show();
+                Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+                startActivityForResult(intent, codeMkAddress);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
