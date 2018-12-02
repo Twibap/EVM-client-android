@@ -38,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView viewPrice;
     private int amount;
-    private String account;
+
+    private TextView viewAddress;
+    private String address;
 
     // WebSocket
     private OkHttpClient httpClient;
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, AccountActivity.class);
             startActivityForResult(intent, codeMkAddress);
         } else {
-            account = sf.getString("account", null);
+             address = sf.getString("account", null);
         }
 
         viewInit();
@@ -98,6 +100,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && address != null){
+            viewAddress.setText(address);
+        }
+    }
+
+    @Override
     protected void onStop() {
         webSocket.close(PriceListener.NORMAL_CLOSURE_STATUS, TAG+" - onStop");
 
@@ -109,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
         btBuy = findViewById(R.id.buttonBuy);
 
         viewPrice = findViewById(R.id.viewEtherPrice);
+        viewAddress = findViewById(R.id.view_address);
 
         btGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -183,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // 주문내용 생성
-        Order order = new Order(account, token, amount, price.getId());
+        Order order = new Order( address, token, amount, price.getId());
         Log.i(TAG, "onClick_request: order->"+order.toJson());
 
         // 주문번호 생성(서버 저장)
@@ -220,9 +231,9 @@ public class MainActivity extends AppCompatActivity {
 
         switch (requestCode){
             case codeMkAddress:
-                account = data.getStringExtra("account");
+                address = data.getStringExtra("account");
 
-                Toast.makeText(this, account, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,  address, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
