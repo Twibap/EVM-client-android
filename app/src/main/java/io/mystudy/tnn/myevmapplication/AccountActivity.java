@@ -207,15 +207,20 @@ public class AccountActivity
 
                 String qrData = result.getContents();
 
-                // QR 코드로 입력된 주소는 기본 주소 양식만 검사한다.
-                if ( AddressUtils.isValidAddress(qrData) ){
+                // Ethereum용 주소인지 확인한다.
+                if ( qrData.startsWith("ethereum:") ){
                     Toast.makeText(this, "Scanned", Toast.LENGTH_LONG).show();
+                    qrData = qrData.replace("ethereum:", "");
 
-                    // Checksum 되지 않은 주소는 Checksum 한다.
-                    if ( !AddressUtils.isValidChecksumAddress(qrData))
-                        qrData = AddressUtils.toChecksumAddress(qrData);
+                    // QR 코드로 입력된 주소는 기본 주소 양식만 검사한다.
+                    if( AddressUtils.isValidAddress(qrData) ){
+                        // Checksum 되지 않은 주소는 Checksum 한다.
+                        if ( !AddressUtils.isValidChecksumAddress(qrData))
+                            qrData = AddressUtils.toChecksumAddress(qrData);
 
-                    address = qrData;
+                        address = qrData;
+                    }
+
                 } else {
                     Dlog.e("QR data is not Ethereum address");
                     Toast.makeText(this, R.string.err_qr_msg_address, Toast.LENGTH_SHORT).show();
