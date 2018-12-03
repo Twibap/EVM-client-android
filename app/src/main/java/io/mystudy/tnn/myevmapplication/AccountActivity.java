@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -47,6 +48,9 @@ public class AccountActivity
         setContentView(R.layout.activity_address);
 
         initView();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle( getString(R.string.title_address) );
 
         database = getSharedPreferences("Customer", MODE_PRIVATE);
         if (database.contains("account"))
@@ -160,6 +164,20 @@ public class AccountActivity
                 .setNegativeButton("아니오",this)
                 .setCancelable(false)
                 .show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                break;
+
+            default:
+                Dlog.e( "Selected Option Id : "+item.getItemId() );
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     @Override

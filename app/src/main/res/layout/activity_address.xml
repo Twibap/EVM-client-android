@@ -8,82 +8,83 @@
     tools:context=".AccountActivity"
     >
 
-<android.support.constraint.ConstraintLayout
-    android:id="@+id/view_activity_address"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:focusableInTouchMode="true"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:layout_editor_absoluteY="25dp">
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/editAddressLayout"
-        android:layout_width="wrap_content"
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/view_activity_address"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_qr_code">
+        android:focusableInTouchMode="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:layout_editor_absoluteY="25dp">
 
-        <EditText
-            android:id="@+id/editAddress"
-            android:layout_width="250dp"
+         <android.support.design.widget.TextInputLayout
+            android:id="@+id/editAddressLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:ems="10"
-            android:hint="@string/addressFieldHint"
-            android:inputType="textPersonName"
-            android:layout_gravity="center"
-            />
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_qr_code">
 
-    </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/editAddress"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:ems="10"
+                android:hint="@string/addressFieldHint"
+                android:inputType="textPersonName"
+                />
 
-    <Button
-        android:id="@+id/buttonEnter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/btAddressEnter"
-        app:layout_constraintEnd_toEndOf="@+id/checkBoxSaveAddress"
-        app:layout_constraintTop_toBottomOf="@+id/checkBoxSaveAddress"/>
+        </android.support.design.widget.TextInputLayout>
 
-    <ImageView
-        android:id="@+id/view_qr_code"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="24dp"
-        android:contentDescription="@string/logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo_ethereum"/>
+        <Button
+            android:id="@+id/buttonEnter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/btAddressEnter"
+            app:layout_constraintEnd_toEndOf="@+id/checkBoxSaveAddress"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxSaveAddress"/>
 
-    <CheckBox
-        android:id="@+id/checkBoxSaveAddress"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/AddressSaveCheckMsg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editAddressLayout"/>
+        <ImageView
+            android:id="@+id/view_qr_code"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="24dp"
+            android:contentDescription="@string/logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logo_ethereum"/>
 
-    <Button
-        android:id="@+id/buttonQrScanner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="QR"
-        app:layout_constraintStart_toStartOf="@+id/checkBoxSaveAddress"
-        app:layout_constraintTop_toBottomOf="@+id/checkBoxSaveAddress"/>
+        <CheckBox
+            android:id="@+id/checkBoxSaveAddress"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/AddressSaveCheckMsg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editAddressLayout"/>
 
-</android.support.constraint.ConstraintLayout>
+        <Button
+            android:id="@+id/buttonQrScanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="QR"
+            app:layout_constraintStart_toStartOf="@+id/checkBoxSaveAddress"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxSaveAddress"/>
+
+    </android.support.constraint.ConstraintLayout>
 </ScrollView>

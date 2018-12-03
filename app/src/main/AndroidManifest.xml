@@ -15,14 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--<meta-data-->
-            <!--android:name="com.google.firebase.messaging.default_notification_channel_id"-->
-            <!--android:value="@string/default_notification_channel_id"/>-->
+        <!-- <meta-data -->
+        <!-- android:name="com.google.firebase.messaging.default_notification_channel_id" -->
+        <!-- android:value="@string/default_notification_channel_id"/> -->
 
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -32,13 +31,12 @@
         <activity android:name=".AccountActivity">
         </activity>
 
-        <service
-            android:name=".firebase.EVM_FirebaseMessagingService"
-            >
+        <service android:name=".firebase.EVM_FirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+
     </application>
 
 </manifest>
