@@ -22,6 +22,7 @@ import io.mystudy.tnn.myevmapplication.Application.Confidential;
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
 import io.mystudy.tnn.myevmapplication.Vending.Order;
 import io.mystudy.tnn.myevmapplication.task.PaymentTask;
+import io.mystudy.tnn.myevmapplication.wallet.AskWalletActivity;
 import io.mystudy.tnn.myevmapplication.websocket.PriceListener;
 import kr.co.bootpay.BootpayAnalytics;
 import okhttp3.OkHttpClient;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sf = getSharedPreferences("Customer", MODE_PRIVATE);
         if( !sf.contains("account") ){
-            Intent intent = new Intent(this, AccountActivity.class);
+            Intent intent = new Intent(this, AskWalletActivity.class);
             startActivityForResult(intent, codeMkAddress);
         } else {
              address = sf.getString("account", null);
@@ -232,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode){
             case codeMkAddress:
                 address = data.getStringExtra("account");
+                address = AddressUtils.toChecksumAddress(address);
 
                 Toast.makeText(this,  address, Toast.LENGTH_SHORT).show();
                 break;

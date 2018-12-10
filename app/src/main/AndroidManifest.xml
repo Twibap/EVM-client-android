@@ -37,6 +37,13 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".wallet.AskWalletActivity">
+        </activity>
+        <activity
+            android:name=".wallet.MnemonicActivity"
+            android:label="@string/title_activity_mk_wallet"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

@@ -2,10 +2,10 @@
     <string name="app_name">EVM - Ethereum Vending Machine</string>
 
     <!--<string name="url_price_websocket">ws://192.168.0.5:8080</string>-->
-    <string name="url_price">172.16.7.171</string>
+    <string name="url_price">54.180.31.39</string>
     <!--<string name="url_price">192.168.0.5</string>-->
     <string name="port_price">8080</string>
-    <string name="url_order">172.16.7.171</string>
+    <string name="url_order">54.180.31.39</string>
     <!--<string name="url_order">192.168.0.5</string>-->
     <string name="port_order">3000</string>
 
@@ -38,5 +38,8 @@
 
     <string name="title_main">Testnet - Ropsten</string>
     <string name="title_address">Account</string>
+    <string name="title_activity_mk_wallet">MkWalletActivity</string>
+    <string name="address_description">지갑 주소는 이더리움을 송금받기 위한 정보입니다. 다른 사람에게 이더리움을 받으려면 지갑 주소를 전달하세요.</string>
+    <string name="private_key_description">개인 키는 지갑에 저장된 이더리움을 사용할 수 있는 중요한 데이터입니다. 분실하거나 도난당하지 않도록 주의하십시오. 이 화면을 지나면 다시는 확인할 수 없습니다.</string>
 
 </resources>

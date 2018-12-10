@@ -62,7 +62,6 @@ public class AccountActivity
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus && address != null){
 
-            if (database.contains("account"))
                 addressField.setText( address );
         }
     }
@@ -228,25 +227,6 @@ public class AccountActivity
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    @Override
-    public void finish() {
-        if( !database.contains("account") && !getIntent().hasExtra("account")) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
-            builder
-                    .setMessage("종료하시겠습니까?")
-                    .setPositiveButton("네", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    finishAffinity();
-                }
-            })
-                    .setNegativeButton("아니오", null)
-                    .show();
-        } else {
-            super.finish();
         }
     }
 
