@@ -21,8 +21,8 @@ import io.mystudy.tnn.myevmapplication.Application.BaseApplication;
 import io.mystudy.tnn.myevmapplication.Application.Confidential;
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
 import io.mystudy.tnn.myevmapplication.Vending.Order;
+import io.mystudy.tnn.myevmapplication.manual.ManualActivity;
 import io.mystudy.tnn.myevmapplication.task.PaymentTask;
-import io.mystudy.tnn.myevmapplication.wallet.AskWalletActivity;
 import io.mystudy.tnn.myevmapplication.websocket.PriceListener;
 import kr.co.bootpay.BootpayAnalytics;
 import okhttp3.OkHttpClient;
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sf = getSharedPreferences("Customer", MODE_PRIVATE);
         if( !sf.contains("account") ){
-            Intent intent = new Intent(this, AskWalletActivity.class);
+            Intent intent = new Intent(this, ManualActivity.class);
             startActivityForResult(intent, codeMkAddress);
         } else {
              address = sf.getString("account", null);

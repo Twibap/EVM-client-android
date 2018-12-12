@@ -1,60 +1,46 @@
-package io.mystudy.tnn.myevmapplication.wallet;
+package io.mystudy.tnn.myevmapplication.manual;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
 
-import io.mystudy.tnn.myevmapplication.AccountActivity;
 import io.mystudy.tnn.myevmapplication.R;
 
-/**
- * 사용자의 지갑 보유 여부를 확인하는 Activity이다.
- * 지갑이 있는 사용자는 계정 주소 입력 화면으로 이동한다.
- * 지갑이 없는 사용자는 지갑 생성 화면으로 이동한다.
- * 각 화면의 결과를 MainActivity로 전달한다.
- */
-public class AskWalletActivity extends AppCompatActivity implements View.OnClickListener {
+public class ManualActivity extends AppCompatActivity {
 
-    Button btYesHaveWallet;
-    Button btNoHaveWallet;
+    /**
+     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * fragments for each of the sections. We use a
+     * {@link FragmentPagerAdapter} derivative, which will keep every
+     * loaded fragment in memory. If this becomes too memory intensive, it
+     * may be best to switch to a
+     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ask_wallet);
+        setContentView(R.layout.activity_manual);
 
-        viewInit();
-    }
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-    private void viewInit(){
-        btYesHaveWallet = findViewById(R.id.btYes);
-        btNoHaveWallet = findViewById(R.id.btNo);
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        btYesHaveWallet.setOnClickListener(this);
-        btNoHaveWallet.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View view) {
-        Intent intent = null;
-        switch (view.getId()){
-            // 지갑 주소를 입력한다.
-            case R.id.btYes:
-                intent = new Intent(this, AccountActivity.class);
-                break;
-
-            // 지갑을 만든다.
-            case R.id.btNo:
-                intent = new Intent(this, MnemonicActivity.class);
-                break;
-        }
-
-        startActivityForResult(intent, 0);
     }
 
     @Override
