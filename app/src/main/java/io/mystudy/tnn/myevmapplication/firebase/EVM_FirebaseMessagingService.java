@@ -112,8 +112,8 @@ public class EVM_FirebaseMessagingService extends FirebaseMessagingService {
         Map<String, String> data = remoteMessage.getData();
 
         // 1. Create/Retrieve Notification Channel for O and beyond devices (26+).
-//        String notificationChannelId =
-//                NotificationUtil.createNotificationChannel(this, bigTextStyleReminderAppData);
+        String notificationChannelId =
+                NotificationUtil.createNotificationChannel(this, remoteMessage);
 
 
         // 2. Build the BIG_TEXT_STYLE.
@@ -191,7 +191,7 @@ public class EVM_FirebaseMessagingService extends FirebaseMessagingService {
         // Notification Channel Id is ignored for Android pre O (26).
         NotificationCompat.Builder notificationCompatBuilder =
                 new NotificationCompat.Builder(
-                        getApplicationContext());
+                        getApplicationContext(), notificationChannelId);
 
         Notification notification = notificationCompatBuilder
                 // BIG_TEXT_STYLE sets title and content for API 16 (4.1 and after).
@@ -259,8 +259,8 @@ public class EVM_FirebaseMessagingService extends FirebaseMessagingService {
         Map<String, String> data = remoteMessage.getData();
 
         // 1. Create/Retrieve Notification Channel for O and beyond devices (26+).
-//        String notificationChannelId =
-//                NotificationUtil.createNotificationChannel(this, bigTextStyleReminderAppData);
+        String notificationChannelId =
+                NotificationUtil.createNotificationChannel(this, remoteMessage);
 
 
         // 2. Build the BIG_TEXT_STYLE.
@@ -351,7 +351,7 @@ public class EVM_FirebaseMessagingService extends FirebaseMessagingService {
         // Notification Channel Id is ignored for Android pre O (26).
         NotificationCompat.Builder notificationCompatBuilder =
                 new NotificationCompat.Builder(
-                        getApplicationContext());
+                        getApplicationContext(), notificationChannelId);
 
         Notification notification = notificationCompatBuilder
                 // BIG_TEXT_STYLE sets title and content for API 16 (4.1 and after).
