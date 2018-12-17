@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+    static final int TOTAL_PAGES = 4;
+
     SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -26,6 +28,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Show 4 total pages.
-        return 4;
+        return TOTAL_PAGES;
     }
 }

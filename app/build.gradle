@@ -47,6 +47,8 @@ dependencies {
     // for QR code scan
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
+    // for Viewpager indicator
+    implementation 'com.romandanylyk:pageindicatorview:1.0.0'
 }
 
 // ADD THIS AT THE BOTTOM

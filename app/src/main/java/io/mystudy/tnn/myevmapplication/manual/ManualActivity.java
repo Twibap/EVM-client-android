@@ -9,9 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import com.rd.PageIndicatorView;
+
 import io.mystudy.tnn.myevmapplication.R;
 
-public class ManualActivity extends AppCompatActivity {
+public class ManualActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -28,6 +30,11 @@ public class ManualActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    /**
+     * Viewpager page indicator
+     */
+    private PageIndicatorView mPageIndicatorView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +47,26 @@ public class ManualActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.addOnPageChangeListener(this);
+
+        mPageIndicatorView = findViewById(R.id.pageIndicatorView);
+        mPageIndicatorView.setViewPager( mViewPager );
+        mPageIndicatorView.setCount( SectionsPagerAdapter.TOTAL_PAGES ); // specify total count of indicators
+        mPageIndicatorView.setSelection(0);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        mPageIndicatorView.setSelection(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
 
     }
 

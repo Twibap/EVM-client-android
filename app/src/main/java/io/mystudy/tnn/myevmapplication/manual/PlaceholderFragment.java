@@ -56,6 +56,8 @@ public class PlaceholderFragment extends Fragment implements View.OnClickListene
         } else {
             rootView = inflater.inflate(R.layout.fragment_manual, container, false);
 
+            rootView.setBackgroundColor( getResources().getColor(R.color.colorPrimaryDark) );
+
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
         }
