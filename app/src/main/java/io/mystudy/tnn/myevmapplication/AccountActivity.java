@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -26,13 +25,14 @@ import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
+import io.mystudy.tnn.myevmapplication.Application.edittext.ClearEditText;
 
 public class AccountActivity
         extends AppCompatActivity
         implements View.OnClickListener, DialogInterface.OnClickListener {
 
     TextInputLayout layoutAddress;
-    EditText addressField;
+    ClearEditText addressField;
     Button btEnter;
     CheckBox checkBoxSaveAddr;
     SharedPreferences database;
