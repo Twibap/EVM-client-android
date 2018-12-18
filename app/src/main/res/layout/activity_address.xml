@@ -1,38 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_activity_address"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AccountActivity"
-    >
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:layout_editor_absoluteY="25dp">
+
+    <ImageView
+        android:id="@+id/view_qr_code"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#ffffff"
+        android:contentDescription="@string/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_ethereum"/>
 
     <android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/view_activity_address"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusableInTouchMode="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:layout_editor_absoluteY="25dp">
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_qr_code">
 
-         <android.support.design.widget.TextInputLayout
+        <android.support.design.widget.TextInputLayout
             android:id="@+id/editAddressLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/textBoxOnSurface"
             android:orientation="vertical"
+            android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_qr_code">
+            app:layout_constraintTop_toTopOf="parent">
 
             <EditText
                 android:id="@+id/editAddress"
-                android:layout_width="250dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="24dp"
@@ -40,6 +55,17 @@
                 android:hint="@string/addressFieldHint"
                 android:inputType="textPersonName"
                 />
+
+            <CheckBox
+                android:id="@+id/checkBoxSaveAddress"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/AddressSaveCheckMsg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editAddressLayout"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -49,31 +75,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginRight="16dp"
             android:text="@string/btAddressEnter"
-            app:layout_constraintEnd_toEndOf="@+id/checkBoxSaveAddress"
-            app:layout_constraintTop_toBottomOf="@+id/checkBoxSaveAddress"/>
-
-        <ImageView
-            android:id="@+id/view_qr_code"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="48dp"
-            android:layout_marginBottom="24dp"
-            android:contentDescription="@string/logo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logo_ethereum"/>
-
-        <CheckBox
-            android:id="@+id/checkBoxSaveAddress"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/AddressSaveCheckMsg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
+            style="@style/Widget.AppCompat.Button.Colored"
+            app:layout_constraintEnd_toEndOf="@+id/editAddressLayout"
             app:layout_constraintTop_toBottomOf="@+id/editAddressLayout"/>
 
         <Button
@@ -82,9 +87,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
             android:text="QR"
-            app:layout_constraintStart_toStartOf="@+id/checkBoxSaveAddress"
-            app:layout_constraintTop_toBottomOf="@+id/checkBoxSaveAddress"/>
-
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            app:layout_constraintStart_toStartOf="@+id/editAddressLayout"
+            app:layout_constraintTop_toBottomOf="@+id/editAddressLayout"/>
     </android.support.constraint.ConstraintLayout>
-</ScrollView>
+
+</LinearLayout>
