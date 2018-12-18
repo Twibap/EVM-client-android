@@ -51,6 +51,7 @@ public class AccountActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle( getString(R.string.title_address) );
+        getSupportActionBar().setElevation( getResources().getDimension(R.dimen.actionbar_elevation) );
 
         database = getSharedPreferences("Customer", MODE_PRIVATE);
         if (database.contains("account"))
