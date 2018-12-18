@@ -207,7 +207,7 @@ public class EVM_FirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(notifyPendingIntent)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 // Set primary color (important for Wear 2.0 Notifications).
-                .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
+                .setColor(ContextCompat.getColor(getApplicationContext(), R.color.primaryColor))
 
                 // SIDE NOTE: Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
                 // devices and all Wear devices. If you have more than one notification and
@@ -367,7 +367,7 @@ public class EVM_FirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(notifyPendingIntent)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 // Set primary color (important for Wear 2.0 Notifications).
-                .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
+                .setColor(ContextCompat.getColor(getApplicationContext(), R.color.primaryColor))
 
                 // SIDE NOTE: Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
                 // devices and all Wear devices. If you have more than one notification and
