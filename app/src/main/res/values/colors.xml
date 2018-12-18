@@ -7,7 +7,9 @@
     <color name="secondaryColor">#f9aa33</color>
     <color name="secondaryLightColor">#ffdc65</color>
     <color name="secondaryDarkColor">#c17b00</color>
-    <color name="primaryTextColor">#ffffff</color>
-    <color name="secondaryTextColor">#000000</color>
+    <color name="primaryTextColor">@color/primary_text_color</color>
+    <color name="primaryTextInverseColor">#000000</color>
+    <color name="secondaryTextColor">@color/secondary_text_color</color>
+    <color name="secondaryTextInverseColor">#bf000000</color>
 
 </resources>
