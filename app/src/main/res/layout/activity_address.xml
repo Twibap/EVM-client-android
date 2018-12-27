@@ -45,7 +45,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <io.mystudy.tnn.myevmapplication.Application.edittext.ClearEditText
+            <io.mystudy.tnn.myevmapplication.Application.edittext.QRcodeEditText
                 android:id="@+id/editAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -81,17 +81,6 @@
             app:layout_constraintEnd_toEndOf="@+id/editAddressLayout"
             app:layout_constraintTop_toBottomOf="@+id/editAddressLayout"/>
 
-        <Button
-            android:id="@+id/buttonQrScanner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
-            android:text="QR"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
-            app:layout_constraintStart_toStartOf="@+id/editAddressLayout"
-            app:layout_constraintTop_toBottomOf="@+id/editAddressLayout"/>
     </android.support.constraint.ConstraintLayout>
 
 </LinearLayout>

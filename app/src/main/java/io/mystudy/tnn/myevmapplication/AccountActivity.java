@@ -25,19 +25,18 @@ import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
-import io.mystudy.tnn.myevmapplication.Application.edittext.ClearEditText;
+import io.mystudy.tnn.myevmapplication.Application.edittext.QRcodeEditText;
 
 public class AccountActivity
         extends AppCompatActivity
         implements View.OnClickListener, DialogInterface.OnClickListener {
 
     TextInputLayout layoutAddress;
-    ClearEditText addressField;
+    QRcodeEditText addressField;
     Button btEnter;
     CheckBox checkBoxSaveAddr;
     SharedPreferences database;
 
-    Button btQrScan;
     ImageView viewQrCode;
 
     String address;
@@ -78,8 +77,6 @@ public class AccountActivity
         checkBoxSaveAddr.setOnClickListener(this);
 
         viewQrCode = findViewById(R.id.view_qr_code);
-        btQrScan = findViewById(R.id.buttonQrScanner);
-        btQrScan.setOnClickListener(this);
     }
 
     @Override
@@ -92,13 +89,6 @@ public class AccountActivity
             case R.id.checkBoxSaveAddress:
                 if(database.contains("account"))
                     askOverwrite();
-                break;
-
-            case R.id.buttonQrScanner:
-                new IntentIntegrator(this)
-                        .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
-                        .setBeepEnabled(false)
-                        .initiateScan();
                 break;
         }
     }
