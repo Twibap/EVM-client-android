@@ -7,11 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.request.RequestOptions;
 
 import io.mystudy.tnn.myevmapplication.AccountActivity;
 import io.mystudy.tnn.myevmapplication.R;
 import io.mystudy.tnn.myevmapplication.wallet.MnemonicActivity;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -40,25 +46,44 @@ public class PlaceholderFragment extends Fragment implements View.OnClickListene
         return fragment;
     }
 
+    ImageView imageView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         boolean isLastSection = getArguments().getBoolean(ARG_IS_LAST_SECTION);
 
         View rootView;
+        rootView = inflater.inflate(R.layout.fragment_ask_wallet, container, false);
+
+        ImageView imageView = rootView.findViewById(R.id.imageView);
+        TextView textView = (TextView) rootView.findViewById(R.id.textView);
+        Button btYesHaveWallet = rootView.findViewById(R.id.btYes);
+        Button btNoHaveWallet = rootView.findViewById(R.id.btNo);
+        btYesHaveWallet.setOnClickListener(this);
+        btNoHaveWallet.setOnClickListener(this);
+
+        MultiTransformation multi = new MultiTransformation<>(
+//                new CropTransformation(200, 200),
+                new RoundedCornersTransformation(250, 8, RoundedCornersTransformation.CornerType.ALL)
+        );
+
         if (isLastSection){
-            rootView = inflater.inflate(R.layout.fragment_ask_wallet, container, false);
-
-            Button btYesHaveWallet = rootView.findViewById(R.id.btYes);
-            Button btNoHaveWallet = rootView.findViewById(R.id.btNo);
-
-            btYesHaveWallet.setOnClickListener(this);
-            btNoHaveWallet.setOnClickListener(this);
+            btYesHaveWallet.setVisibility(View.VISIBLE);
+            btNoHaveWallet.setVisibility(View.VISIBLE);
+            Glide.with(this).load( getResources().getDrawable(R.drawable.wellcome_wallet))
+                    .apply( RequestOptions.bitmapTransform(multi)).into(imageView);
+//            imageView.setImageBitmap( BitmapFactory.decodeResource(getResources(), R.drawable.wellcome_wallet) );
         } else {
-            rootView = inflater.inflate(R.layout.fragment_manual, container, false);
-
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            btYesHaveWallet.setVisibility(View.INVISIBLE);
+            btNoHaveWallet.setVisibility(View.INVISIBLE);
+            Glide.with(this).load( getResources().getDrawable(R.drawable.wellcome_coin))
+                    .apply( RequestOptions.bitmapTransform(multi)).into(imageView);
+//            imageView.setImageBitmap( BitmapFactory.decodeResource(getResources(), R.drawable.wellcome_coin) );
         }
+
+        String wellcomeMsg = getResources().getStringArray(R.array.manual_msg)[ getArguments().getInt(ARG_SECTION_NUMBER)-1 ];
+        textView.setText(wellcomeMsg);
+
+//        textView.setText(getString(R.string., getArguments().getInt(ARG_SECTION_NUMBER)));
 
         return rootView;
     }
