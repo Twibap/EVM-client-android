@@ -1,4 +1,4 @@
-package io.mystudy.tnn.myevmapplication;
+package io.mystudy.tnn.myevmapplication.wallet;
 
 import android.util.Log;
 
@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
 
-class AddressUtils {
+public class AddressUtils {
     private static final String TAG = AddressUtils.class.getSimpleName();
 
     // Account 주소 정규표현식 확인
@@ -23,7 +23,7 @@ class AddressUtils {
     }
 
     // Account Checksum 변환
-    static String toChecksumAddress(String address){
+    public static String toChecksumAddress(String address){
         Dlog.d("toChecksumAddress: source -> "+address);
         Log.d(TAG, "toChecksumAddress: source -> "+address);
         address = address.toLowerCase();

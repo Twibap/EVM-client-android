@@ -1,4 +1,4 @@
-package io.mystudy.tnn.myevmapplication;
+package io.mystudy.tnn.myevmapplication.wallet;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -26,10 +27,14 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
 import io.mystudy.tnn.myevmapplication.Application.edittext.QRcodeEditText;
+import io.mystudy.tnn.myevmapplication.R;
 
-public class AccountActivity
+public class AccountChangeActivity
         extends AppCompatActivity
-        implements View.OnClickListener, DialogInterface.OnClickListener {
+        implements
+        View.OnClickListener,
+        DialogInterface.OnClickListener,
+        CompoundButton.OnCheckedChangeListener {
 
     TextInputLayout layoutAddress;
     QRcodeEditText addressField;
@@ -40,29 +45,34 @@ public class AccountActivity
     ImageView viewQrCode;
 
     String address;
+    boolean isWillSave = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_address);
+        setContentView(R.layout.activity_account_change);
 
         initView();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle( getString(R.string.title_address) );
+        getSupportActionBar().setTitle( getString(R.string.title_address_change) );
 
         database = getSharedPreferences("Customer", MODE_PRIVATE);
-        if (database.contains("account"))
+        if (database.contains("account")) {
             address = database.getString("account", null);
+            isWillSave = true;
+        }
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && address != null){
 
-                addressField.setText( address );
-        }
+        if (hasFocus && address != null)
+            addressField.setText( address );
+
+        if (hasFocus && isWillSave)
+            checkBoxSaveAddr.setChecked(true);
     }
 
     private void initView(){
@@ -74,7 +84,7 @@ public class AccountActivity
         btEnter.setOnClickListener(this);
 
         checkBoxSaveAddr = findViewById(R.id.checkBoxSaveAddress);
-        checkBoxSaveAddr.setOnClickListener(this);
+        checkBoxSaveAddr.setOnCheckedChangeListener(this);
 
         viewQrCode = findViewById(R.id.view_qr_code);
     }
@@ -85,12 +95,14 @@ public class AccountActivity
             case R.id.buttonEnter:
                 enterAccount();
                 break;
-
-            case R.id.checkBoxSaveAddress:
-                if(database.contains("account"))
-                    askOverwrite();
-                break;
         }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (database.contains("account") && isChecked)
+            if (database.getString("account", null) != address)
+                askOverwrite();
     }
 
     private void enterAccount(){
@@ -121,7 +133,7 @@ public class AccountActivity
         Dlog.d("account returned: " + account);
         setResult(RESULT_OK, intent);
 
-        AccountActivity.this.finish();
+        AccountChangeActivity.this.finish();
     }
 
     // 주소 조건에 따라 에러 메세지
@@ -248,8 +260,7 @@ public class AccountActivity
                     Bitmap qrCode = encoder.encodeBitmap(
                             address, BarcodeFormat.QR_CODE,
                             view_width, view_height);
-//                    400, 400);
-//                            viewQrCode.getMaxWidth(), viewQrCode.getMaxHeight());
+                    // TODO DELETE Default image shown
                     viewQrCode.setImageBitmap( qrCode );
 
                 } catch (WriterException e) {

@@ -23,6 +23,8 @@ import io.mystudy.tnn.myevmapplication.Application.Dlog;
 import io.mystudy.tnn.myevmapplication.Vending.Order;
 import io.mystudy.tnn.myevmapplication.manual.ManualActivity;
 import io.mystudy.tnn.myevmapplication.task.PaymentTask;
+import io.mystudy.tnn.myevmapplication.wallet.AccountActivity;
+import io.mystudy.tnn.myevmapplication.wallet.AddressUtils;
 import io.mystudy.tnn.myevmapplication.websocket.PriceListener;
 import kr.co.bootpay.BootpayAnalytics;
 import okhttp3.OkHttpClient;
@@ -215,6 +217,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_account:
                 Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+                intent.putExtra("account", address);    // Account 값 전달
+
                 startActivityForResult(intent, codeMkAddress);
                 return true;
             default:

@@ -28,7 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".AccountActivity">
+        <activity android:name=".wallet.AccountChangeActivity">
         </activity>
 
         <service android:name=".firebase.EVM_FirebaseMessagingService">
@@ -46,6 +46,10 @@
             android:name=".manual.ManualActivity"
             android:label="@string/title_activity_manual"
             android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".wallet.AccountActivity"
+            android:label="@string/title_activity_account">
         </activity>
     </application>
 

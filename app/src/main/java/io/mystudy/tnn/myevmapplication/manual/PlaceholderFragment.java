@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.request.RequestOptions;
 
-import io.mystudy.tnn.myevmapplication.AccountActivity;
+import io.mystudy.tnn.myevmapplication.wallet.AccountChangeActivity;
 import io.mystudy.tnn.myevmapplication.R;
 import io.mystudy.tnn.myevmapplication.wallet.MnemonicActivity;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -94,7 +94,7 @@ public class PlaceholderFragment extends Fragment implements View.OnClickListene
         switch (view.getId()){
             // 지갑 주소를 입력한다.
             case R.id.btYes:
-                intent = new Intent(getContext(), AccountActivity.class);
+                intent = new Intent(getContext(), AccountChangeActivity.class);
                 break;
 
             // 지갑을 만든다.
