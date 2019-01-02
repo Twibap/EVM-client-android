@@ -1,7 +1,9 @@
 package io.mystudy.tnn.myevmapplication.task;
 
 import android.os.AsyncTask;
-import android.widget.TextView;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,13 +29,13 @@ public class GetEtherBalanceTask extends AsyncTask<String, Boolean, String> {
     private String ETH_NODE;
     private String ETH_JSON_RPC_MSG;
 
-    private TextView balanceView;
+    private Handler mBalanceHandler;
 
     public enum NetworkType {
         MAIN, ROPSTEN   // , KOVAN, RINKEBY
     }
 
-    public GetEtherBalanceTask(NetworkType networkType, TextView textview){
+    public GetEtherBalanceTask(NetworkType networkType, Handler balanceHandler){
         switch (networkType){
             case MAIN:
                 ETH_NODE = "https://mainnet.infura.io/v3/"+Confidential.Infura_Project_ID;
@@ -44,12 +46,12 @@ public class GetEtherBalanceTask extends AsyncTask<String, Boolean, String> {
                 break;
         }
 
-        balanceView = textview;
+        mBalanceHandler = balanceHandler;
     }
 
     @Override
     protected void onPreExecute() {
-        balanceView.setText("Checking balance...");
+        mBalanceHandler.sendEmptyMessage(1);    // send true for show loading message;
         super.onPreExecute();
     }
 
@@ -104,8 +106,14 @@ public class GetEtherBalanceTask extends AsyncTask<String, Boolean, String> {
                 BigDecimal ethBalance = Convert.fromWei(weiBalance.toString(), Convert.Unit.ETHER);
 
                 String balance = ethBalance.toString();
+                Bundle bundle = new Bundle();
+                bundle.putString("balance", balance);
 
-                balanceView.setText( balance + " Ether");
+                Message msg = new Message();
+                msg.what = 0;
+                msg.setData(bundle);
+
+                mBalanceHandler.sendMessage(msg);    // send false stop showing loading message
             } catch (JSONException e) {
                 e.printStackTrace();
             }

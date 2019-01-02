@@ -48,6 +48,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
+            android:theme="@style/AppTheme.NoActionBar"
             android:name=".wallet.AccountActivity"
             android:label="@string/title_activity_account">
         </activity>

@@ -3,47 +3,71 @@ package io.mystudy.tnn.myevmapplication.wallet;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.util.ArrayList;
+
 import io.mystudy.tnn.myevmapplication.R;
 import io.mystudy.tnn.myevmapplication.task.GetEtherBalanceTask;
+import io.mystudy.tnn.myevmapplication.wallet.history.AccountInfoAdapter;
+import io.mystudy.tnn.myevmapplication.wallet.history.PurchaseHistory;
 
 public class AccountActivity extends AppCompatActivity{
 
     private static final int CODE_CHANGE_ADDRESS = 1001;
 
     ImageView qrCodeView;
-    TextView addressView;
-    TextView balanceView;
 
     private String address;
+
+    RecyclerView mHistoryView;
+    AccountInfoAdapter mHistoryAdapter;
+    ArrayList<PurchaseHistory> mHistoryItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-        address = getIntent().getStringExtra("account");
+        initData();
 
         initView();
 
     }
 
+    private void initData(){
+        address = getIntent().getStringExtra("account");
+        mHistoryAdapter = new AccountInfoAdapter(mHistoryItems);
+
+        for (int i = 0; i < 20; i++) {
+            mHistoryItems.add(new PurchaseHistory());
+        }
+    }
+
     private void initView(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle( getString(R.string.title_address));
 
         qrCodeView = findViewById(R.id.view_qr_code);
-        addressView = findViewById(R.id.view_address);
-        balanceView = findViewById(R.id.view_balance);
+
+        mHistoryView = findViewById(R.id.view_purchase_history);
+        mHistoryView.setLayoutManager(new LinearLayoutManager(this));
+        mHistoryView.setAdapter(mHistoryAdapter);
     }
 
     private void setAddress(String address){
@@ -54,7 +78,7 @@ public class AccountActivity extends AppCompatActivity{
         getBalance(address);
 
         // to TextView
-        addressView.setText( address );
+        mHistoryAdapter.setmAddress( address );
 
         // to QR code Image View
         // TODO Make clear qr code image
@@ -67,6 +91,7 @@ public class AccountActivity extends AppCompatActivity{
                     address, BarcodeFormat.QR_CODE,
                     view_width, view_height
             );
+//            qrCodeView.setImageResource( R.drawable.logo_ethereum );
             qrCodeView.setImageBitmap( qrCodeImage );
         } catch (WriterException e) {
             e.printStackTrace();
@@ -75,7 +100,20 @@ public class AccountActivity extends AppCompatActivity{
     }
 
     private void getBalance(String address){
-        GetEtherBalanceTask task = new GetEtherBalanceTask(GetEtherBalanceTask.NetworkType.ROPSTEN, balanceView);
+        GetEtherBalanceTask task = new GetEtherBalanceTask(GetEtherBalanceTask.NetworkType.ROPSTEN, new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                switch (msg.what){
+                    case 1: // true for showing loading message
+                        mHistoryAdapter.setmBalance("Checking balance...");
+                        break;
+                    case 0: // false for showing loading message
+                        mHistoryAdapter.setmBalance(msg.getData().getString("balance"));
+                        break;
+                }
+                return false;
+            }
+        }));
         task.execute(address);
     }
 
