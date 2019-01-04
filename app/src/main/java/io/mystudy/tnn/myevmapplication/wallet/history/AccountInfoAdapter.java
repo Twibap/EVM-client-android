@@ -210,11 +210,16 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
     }
 
     public void setStateMessage(OrderRepository.STATUS status){
+        if ( status == OrderRepository.STATUS.LOOKING_ORDER )
+            showProgressBar(true);
+        else
+            showProgressBar(false);
+
         mRepositoryStatus = status;
         this.notifyDataSetChanged();
     }
 
-    public void showProgressBar(boolean show){
+    private void showProgressBar(boolean show){
         if ( show )
             mProgressBar.setVisibility(View.VISIBLE);
         else

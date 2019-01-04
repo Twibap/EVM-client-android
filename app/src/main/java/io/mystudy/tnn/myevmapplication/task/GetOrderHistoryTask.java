@@ -20,7 +20,6 @@ public class GetOrderHistoryTask extends AsyncTask<String, Void, Void> {
     @Override
     protected void onPreExecute() {
         mAccountInfoAdapter.setStateMessage(OrderRepository.STATUS.LOOKING_ORDER);
-        mAccountInfoAdapter.showProgressBar(true);
         super.onPreExecute();
     }
 
@@ -58,7 +57,6 @@ public class GetOrderHistoryTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        mAccountInfoAdapter.showProgressBar(false);
         mAccountInfoAdapter.setStateMessage(OrderRepository.getInstance().getStatus());
         super.onPostExecute(aVoid);
     }
