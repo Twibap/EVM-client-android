@@ -48,4 +48,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 
+    <ProgressBar
+        android:id="@+id/history_progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:indeterminateOnly="true"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 </android.support.design.widget.CoordinatorLayout>

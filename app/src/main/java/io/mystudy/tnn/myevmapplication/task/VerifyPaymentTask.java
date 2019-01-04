@@ -13,7 +13,7 @@ import static android.support.constraint.Constraints.TAG;
 public class VerifyPaymentTask extends AsyncTask<Bill, String, String> {
     @Override
     protected String doInBackground(Bill... bills) {
-        OrderRepository repository = new OrderRepository();
+        OrderRepository repository = OrderRepository.getInstance();
         try {
             return repository.verifyPayment(bills[0]);
         } catch (IOException e) {

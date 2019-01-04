@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -20,11 +21,13 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.ArrayList;
 
 import io.mystudy.tnn.myevmapplication.R;
+import io.mystudy.tnn.myevmapplication.Vending.Order;
+import io.mystudy.tnn.myevmapplication.Vending.OrderRepository;
 import io.mystudy.tnn.myevmapplication.task.GetEtherBalanceTask;
+import io.mystudy.tnn.myevmapplication.task.GetOrderHistoryTask;
 import io.mystudy.tnn.myevmapplication.wallet.history.AccountInfoAdapter;
-import io.mystudy.tnn.myevmapplication.wallet.history.PurchaseHistory;
 
-public class AccountActivity extends AppCompatActivity{
+public class AccountActivity extends AppCompatActivity {
 
     private static final int CODE_CHANGE_ADDRESS = 1001;
 
@@ -34,7 +37,8 @@ public class AccountActivity extends AppCompatActivity{
 
     RecyclerView mHistoryView;
     AccountInfoAdapter mHistoryAdapter;
-    ArrayList<PurchaseHistory> mHistoryItems = new ArrayList<>();
+    ArrayList<Order> mHistoryItems = new ArrayList<>();
+    ProgressBar mHistoryProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +55,6 @@ public class AccountActivity extends AppCompatActivity{
         address = getIntent().getStringExtra("account");
         mHistoryAdapter = new AccountInfoAdapter(mHistoryItems);
 
-        for (int i = 0; i < 20; i++) {
-            mHistoryItems.add(new PurchaseHistory());
-        }
     }
 
     private void initView(){
@@ -68,6 +69,9 @@ public class AccountActivity extends AppCompatActivity{
         mHistoryView = findViewById(R.id.view_purchase_history);
         mHistoryView.setLayoutManager(new LinearLayoutManager(this));
         mHistoryView.setAdapter(mHistoryAdapter);
+        mHistoryView.addOnScrollListener(new OrderListOnScrollListener());
+
+        mHistoryProgressBar = findViewById(R.id.history_progressBar);
     }
 
     private void setAddress(String address){
@@ -97,6 +101,9 @@ public class AccountActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 
+        mHistoryItems.clear();
+        GetOrderHistoryTask task = new GetOrderHistoryTask(mHistoryAdapter, mHistoryProgressBar);
+        task.execute(address);
     }
 
     private void getBalance(String address){
@@ -173,5 +180,17 @@ public class AccountActivity extends AppCompatActivity{
         setResult(RESULT_OK, intent);
 
         super.onBackPressed();
+    }
+
+    private class OrderListOnScrollListener extends RecyclerView.OnScrollListener{
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if ( !recyclerView.canScrollVertically(1) &&
+                    OrderRepository.getInstance().getStatus() == OrderRepository.STATUS.HAS_MORE_ORDER){
+                GetOrderHistoryTask task = new GetOrderHistoryTask(mHistoryAdapter, mHistoryProgressBar);
+                task.execute(address, mHistoryItems.size());
+            }
+        }
     }
 }

@@ -34,7 +34,7 @@ public class PaymentTask extends AsyncTask<Order, Order, Order>{
 
     @Override
     protected Order doInBackground(Order... orders) {
-        OrderRepository repository = new OrderRepository();
+        OrderRepository repository = OrderRepository.getInstance();
         try {
             return repository.askOrder(orders[0]);
         } catch (IOException e) {

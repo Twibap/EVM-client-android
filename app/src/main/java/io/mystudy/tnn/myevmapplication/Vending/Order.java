@@ -2,6 +2,20 @@ package io.mystudy.tnn.myevmapplication.Vending;
 
 import com.google.gson.Gson;
 
+import org.web3j.utils.Convert;
+
+import java.util.Date;
+
+// Schema for Order data on vending server
+//    address: String,
+//    token: String,
+//    amount_ether: String,   // Wei
+//    amount_payment: Number,
+//    price_id: ObjectId,
+//    bill_id: { type : ObjectId, default : null },
+//    ordered_at: { type: Date, default: Date.now },
+//    txHash: {type: String, default: null},
+//    bkHash: {type: String, default: null}
 public class Order {
 
     private String _id;    // 주문번호
@@ -12,6 +26,9 @@ public class Order {
     private int amount_payment;      // 구입 금액 == xx,000 원
     private String price_id;    // 구입 이더 가격
     private String bill_id;     // 결제 정보
+    private Date ordered_at;    // 주문 시점
+    private String tx_hash;     // 이더 발행 Transaction hash
+    private String bk_hash;     // tx_hash가 포함된 Block hash
 
     public Order(String _address,
                  String _token,
@@ -66,5 +83,21 @@ public class Order {
 
     public String getToken() {
         return this.token;
+    }
+
+    public String getAmount_ether(){
+        return Convert.fromWei(amount_ether, Convert.Unit.ETHER).toString() + " Ether";
+    }
+
+    public Date getOrdered_at() {
+        return ordered_at;
+    }
+
+    public String getTx_hash() {
+        return tx_hash;
+    }
+
+    public String getBk_hash() {
+        return bk_hash;
     }
 }

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
 import io.mystudy.tnn.myevmapplication.R;
+import io.mystudy.tnn.myevmapplication.Vending.Order;
+import io.mystudy.tnn.myevmapplication.Vending.OrderRepository;
 
 /**
  * Account 데이터를 RecyclerView에 바인딩한다.
@@ -21,16 +23,24 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_TYPE_ACCOUNT_INFO = 0;
     private static final int VIEW_TYPE_HEADLINE = 1;
-    private static final int VIEW_TYPE_PURCHASE_HISTORY = 2;
+    private static final int VIEW_TYPE_HISTORY= 2;
+    private static final int VIEW_TYPE_HISTORY_MESSAGE= 3;
 
-    private int mAccountInfoCount = 0;
-    private int mHeadlineCount = 0;
+    // Address, Balance, History header, History message
+    private static final int ACCOUNT_VIEW_COUNT = 2;
+    private static final int HEADER_VIEW_COUNT = 1;
+    private static final int MESSAGE_VIEW_COUNT = 1;
+    private static final int DEFAULT_VIEW_COUNT = // 4
+            ACCOUNT_VIEW_COUNT +
+            HEADER_VIEW_COUNT +
+            MESSAGE_VIEW_COUNT;
 
     private String mAddress;
     private String mBalance;
-    private ArrayList<PurchaseHistory> mItems;
+    private ArrayList<Order> mItems;
+    private OrderRepository.STATUS mRepositoryStatus = OrderRepository.STATUS.LOOKING_ORDER;
 
-    public AccountInfoAdapter(ArrayList<PurchaseHistory> items){
+    public AccountInfoAdapter(ArrayList<Order> items){
         mItems = items;
     }
 
@@ -41,6 +51,10 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
      */
     @Override
     public int getItemViewType(int position) {
+        if (position == getItemCount() - 1){
+            return VIEW_TYPE_HISTORY_MESSAGE;
+        }
+
         switch (position){
             case 0: // Address
             case 1: // Balance
@@ -48,7 +62,7 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
             case 2: // History Headline
                 return VIEW_TYPE_HEADLINE;
             default:
-                return VIEW_TYPE_PURCHASE_HISTORY;
+                return VIEW_TYPE_HISTORY;
         }
     }
 
@@ -65,12 +79,10 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
 
         switch (viewType){
             case VIEW_TYPE_ACCOUNT_INFO:
-                mAccountInfoCount++;
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_account, parent, false);
                 return new AccountInfoViewHolder( view );
 
             case VIEW_TYPE_HEADLINE:
-                mHeadlineCount++;
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_account_info_headline, parent, false);
                 return new RecyclerView.ViewHolder( view ) {
                     @Override
@@ -79,10 +91,19 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
                     }
                 };
 
-            case VIEW_TYPE_PURCHASE_HISTORY:
+            case VIEW_TYPE_HISTORY_MESSAGE:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_history_message, parent, false);
+                return new RecyclerView.ViewHolder( view ) {
+                    @Override
+                    public String toString() {
+                        return super.toString();
+                    }
+                };
+
+            case VIEW_TYPE_HISTORY:
             default:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_purchase_history, parent, false);
-                return new PurchaseHistoryViewHolder( view );
+                return new OrderHistoryViewHolder( view );
         }
     }
 
@@ -93,45 +114,65 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
      */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Dlog.e("onBindViewHolder : "+position);
+        Dlog.e("onBindViewHolder : "+(position +1)+" / "+getItemCount());
+
+        if ( (position +1) == getItemCount() ){
+            TextView stateMessageView = (TextView) holder.itemView;
+
+            switch ( mRepositoryStatus ){
+                case LOOKING_ORDER:
+                    stateMessageView.setText(R.string.msg_history_looking);
+                    return;
+                case HAS_NO_ORDER:
+                    stateMessageView.setText(R.string.msg_history_no);
+                    return;
+                case HAS_NO_MORE_ORDER:
+                    stateMessageView.setText(R.string.msg_history_no_more);
+                    return;
+                default:
+                    return;
+            }
+        }
 
         if ( holder instanceof AccountInfoViewHolder ){
             AccountInfoViewHolder itemLayout = ((AccountInfoViewHolder) holder);
 
             switch (position){
                 case 0: // Account address
-                    itemLayout.mTitle.setText("Address");
-                    itemLayout.mBody.setText(mAddress);
+                    itemLayout.setTitle("Address");
+                    itemLayout.setBody(mAddress);
                     break;
                 case 1: // Account balance
-                    itemLayout.mTitle.setText("Balance");
-                    itemLayout.mBody.setText(mBalance);
+                    itemLayout.setTitle("Balance");
+                    itemLayout.setBody(mBalance);
                     break;
             }
 
             return;
         }
 
-        if ( holder instanceof PurchaseHistoryViewHolder ){
-            int history_position = position - (mAccountInfoCount + mHeadlineCount);
-            PurchaseHistory item = mItems.get(history_position);
-            PurchaseHistoryViewHolder itemLayout = ((PurchaseHistoryViewHolder) holder);
+        if ( holder instanceof OrderHistoryViewHolder &&
+                mItems.size() > 0){
+            int history_position = position - (ACCOUNT_VIEW_COUNT+HEADER_VIEW_COUNT);
+            Order item = mItems.get(history_position);
+            OrderHistoryViewHolder itemLayout = ((OrderHistoryViewHolder) holder);
 
-            itemLayout.mTitle.setText("History "+history_position);
-            itemLayout.mBody.setText("블라블라");
+            itemLayout.setPaymentAmount(item.getAmount());
+            itemLayout.setDate(item.getOrdered_at());
+            itemLayout.setGoodsAmount(item.getAmount_ether());
 
             return;
         }
 
         // else if HEADLINE
-        ((TextView) holder.itemView).setText("History");
+        if (position == 2)  // 세번째
+            ((TextView) holder.itemView).setText("History");
 
     }
 
     @Override
     public int getItemCount() {
-        // TODO 갯수 확인하기
-        return mAccountInfoCount + mHeadlineCount + mItems.size();
+        return DEFAULT_VIEW_COUNT + mItems.size();
     }
 
     /**
@@ -141,32 +182,12 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
      * AccountInfoViewHolder
      * 계정의 주소, 잔고 정보를 각각의 Item으로 구성하여 보여준다.
      *
-     * PurchaseHistoryViewHolder
+     * OrderHistoryViewHolder
      * 구매 내역을 하나의 Item으로 보여준다.
      *
      * HEADLINE은 Textview 하나이므로 RecyclerView.ViewHolder를 그대로 사용한다.
      *
      */
-    static class AccountInfoViewHolder extends RecyclerView.ViewHolder{
-        private TextView mTitle;
-        private TextView mBody;
-
-        AccountInfoViewHolder(View itemView) {
-            super(itemView);
-            mTitle = itemView.findViewById(R.id.item_title_account);
-            mBody = itemView.findViewById(R.id.item_body_account);
-        }
-    }
-
-    static class PurchaseHistoryViewHolder extends RecyclerView.ViewHolder {
-        private TextView mTitle;
-        private TextView mBody;
-        PurchaseHistoryViewHolder(View itemView) {
-            super(itemView);
-            mTitle = itemView.findViewById(R.id.item_title_purchase_history);
-            mBody = itemView.findViewById(R.id.item_body_purchase_history);
-        }
-    }
 
     public void setmAddress(String address) {
         this.mAddress = address;
@@ -175,6 +196,16 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
 
     public void setmBalance(String balance) {
         this.mBalance = balance;
+        this.notifyDataSetChanged();
+    }
+
+    public void addAll(ArrayList<Order> orders) {
+        if (orders != null)
+            mItems.addAll( orders );
+    }
+
+    public void setStateMessage(OrderRepository.STATUS status){
+        mRepositoryStatus = status;
         this.notifyDataSetChanged();
     }
 
