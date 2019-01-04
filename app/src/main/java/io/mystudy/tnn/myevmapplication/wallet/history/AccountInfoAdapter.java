@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -40,8 +41,12 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
     private ArrayList<Order> mItems;
     private OrderRepository.STATUS mRepositoryStatus = OrderRepository.STATUS.LOOKING_ORDER;
 
-    public AccountInfoAdapter(ArrayList<Order> items){
+    private ProgressBar mProgressBar;
+
+    public AccountInfoAdapter(ArrayList<Order> items, ProgressBar progressBar){
         mItems = items;
+        mProgressBar = progressBar;
+        mProgressBar.setIndeterminate(true);
     }
 
     /**
@@ -207,6 +212,13 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
     public void setStateMessage(OrderRepository.STATUS status){
         mRepositoryStatus = status;
         this.notifyDataSetChanged();
+    }
+
+    public void showProgressBar(boolean show){
+        if ( show )
+            mProgressBar.setVisibility(View.VISIBLE);
+        else
+            mProgressBar.setVisibility(View.GONE);
     }
 
 }

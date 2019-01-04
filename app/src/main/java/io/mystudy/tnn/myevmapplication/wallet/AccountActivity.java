@@ -38,7 +38,6 @@ public class AccountActivity extends AppCompatActivity {
     RecyclerView mHistoryView;
     AccountInfoAdapter mHistoryAdapter;
     ArrayList<Order> mHistoryItems = new ArrayList<>();
-    ProgressBar mHistoryProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +52,10 @@ public class AccountActivity extends AppCompatActivity {
 
     private void initData(){
         address = getIntent().getStringExtra("account");
-        mHistoryAdapter = new AccountInfoAdapter(mHistoryItems);
+        mHistoryAdapter = new AccountInfoAdapter(
+                mHistoryItems,
+                (ProgressBar) findViewById(R.id.history_progressBar)
+        );
 
     }
 
@@ -71,7 +73,6 @@ public class AccountActivity extends AppCompatActivity {
         mHistoryView.setAdapter(mHistoryAdapter);
         mHistoryView.addOnScrollListener(new OrderListOnScrollListener());
 
-        mHistoryProgressBar = findViewById(R.id.history_progressBar);
     }
 
     private void setAddress(String address){
@@ -102,7 +103,7 @@ public class AccountActivity extends AppCompatActivity {
         }
 
         mHistoryItems.clear();
-        GetOrderHistoryTask task = new GetOrderHistoryTask(mHistoryAdapter, mHistoryProgressBar);
+        GetOrderHistoryTask task = new GetOrderHistoryTask(mHistoryAdapter);
         task.execute(address);
     }
 
@@ -188,7 +189,7 @@ public class AccountActivity extends AppCompatActivity {
             super.onScrolled(recyclerView, dx, dy);
             if ( !recyclerView.canScrollVertically(1) &&
                     OrderRepository.getInstance().getStatus() == OrderRepository.STATUS.HAS_MORE_ORDER){
-                GetOrderHistoryTask task = new GetOrderHistoryTask(mHistoryAdapter, mHistoryProgressBar);
+                GetOrderHistoryTask task = new GetOrderHistoryTask(mHistoryAdapter);
                 task.execute(address, mHistoryItems.size());
             }
         }
