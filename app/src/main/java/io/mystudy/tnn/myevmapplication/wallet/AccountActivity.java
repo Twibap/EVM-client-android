@@ -116,7 +116,7 @@ public class AccountActivity extends AppCompatActivity {
                         mHistoryAdapter.setmBalance("Checking balance...");
                         break;
                     case 0: // false for showing loading message
-                        mHistoryAdapter.setmBalance(msg.getData().getString("balance"));
+                        mHistoryAdapter.setmBalance(msg.getData().getString("balance") + " Ether");
                         break;
                 }
                 return false;
