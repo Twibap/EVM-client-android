@@ -16,6 +16,27 @@ class Mnemonic {
         WORD_LIST = readWordList(context);
     }
 
+    byte[] toSeed(String mnemonic, String salt){
+        int iteration = 2048;
+
+        if ( salt == null)
+            salt = "mnemonic"+"";  // salt = "";    ???
+        else
+            salt = "mnemonic"+salt;
+
+        return Hash.PBKDF2withHmacSHA512( mnemonic, salt, iteration);
+
+        // API 26
+//        KeySpec spec = new PBEKeySpec(mnemonic.toCharArray(), salt.getBytes(), iteration);
+//        try {
+//            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2withHmacSHA512");
+//            result = factory.generateSecret(spec).getEncoded();
+//        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+//            e.printStackTrace();
+//        }
+
+    }
+
     String generateMnemonic(byte[] initialEntropy){
 
         // Seed의 Checksum 얻기

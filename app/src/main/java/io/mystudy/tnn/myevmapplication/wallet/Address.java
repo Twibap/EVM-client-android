@@ -1,49 +1,53 @@
 package io.mystudy.tnn.myevmapplication.wallet;
 
-import org.web3j.crypto.ECKeyPair;
-import org.web3j.crypto.Hash;
+import org.spongycastle.jce.ECNamedCurveTable;
+import org.spongycastle.jce.spec.ECNamedCurveParameterSpec;
+import org.spongycastle.math.ec.ECPoint;
 import org.web3j.utils.Numeric;
 
-import java.security.SecureRandom;
+import java.math.BigInteger;
 import java.util.Arrays;
 
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
 
-public class Address {
+class Address{
     private byte[] address;
     private byte[] privateKey;
 
-    public static int ADDRESS_BYTES = 20;
-    public static int ADDRESS_KEY_BYTES = 32;
+    private static final int ADDRESS_BYTES = 20;
+    private static final int ADDRESS_KEY_BYTES = 32;
 
-    Address(){
-        SecureRandom random = new SecureRandom();
-        create( random.generateSeed(ADDRESS_KEY_BYTES) );
+    Address( String address ){
+        if ( AddressUtils.isValidAddress( address ) )
+            this.address = new BigInteger(address, 16).toByteArray();
+        else
+            throw new IllegalArgumentException("Not Ethereum Address");
     }
 
-    Address(byte[] privateKey){
-        create( privateKey );
-    }
-
-    private void create( byte[] privateKey ){
-        // 1. Private key
-        if ( privateKey.length != ADDRESS_KEY_BYTES)
-            this.privateKey = Hash.sha3(privateKey);
+    Address( byte[] privateKey ){
+        // 1. Start from private key
+        if ( privateKey.length != ADDRESS_KEY_BYTES )
+            throw new IllegalArgumentException("Wrong size of PRIVATE KEY! : "+privateKey.length);
         else
             this.privateKey = privateKey;
 
-        // 2. Public key
-        ECKeyPair keyPair = ECKeyPair.create( this.privateKey );
-        byte[] publicKey = keyPair.getPublicKey().toByteArray();
-        byte[] pubKeyHash = Hash.sha3( publicKey );
+        // 2. Public key from private key
+        ECNamedCurveParameterSpec CURVE_PARAMS = ECNamedCurveTable.getParameterSpec("secp256k1");
+        ECPoint publicPoint = CURVE_PARAMS.getG().multiply( new BigInteger(1, privateKey));
+        byte[] publicKey = publicPoint.getEncoded(false);
 
-        // 3. Last 20 bytes
+        // 3. Remove prefix
+        publicKey = Arrays.copyOfRange(publicKey, 1, publicKey.length);
+
+        // 4. Hash public key
+        byte[] pubKeyHash = Hash.KECCAK256( publicKey );
+
+        // 5. Take last 20 bytes
         this.address = Arrays.copyOfRange(
                 pubKeyHash , pubKeyHash.length - ADDRESS_BYTES, pubKeyHash.length);
 
-        Dlog.e("Address created");
-        Dlog.e(getStringAddress());
-        Dlog.e(getStringPrivateKey());
+        Dlog.i("Address created : "+getStringAddress());
+        Dlog.i(privateKey.length+" - "+ Numeric.toHexString( this.privateKey ));
     }
 
     public byte[] getAddress() {
@@ -54,11 +58,8 @@ public class Address {
         return privateKey;
     }
 
-    String getStringAddress(){
-        return Numeric.toHexString( address );
+    String getStringAddress()  {
+        return AddressUtils.toChecksumAddress( Numeric.toHexString( address ) );
     }
 
-    String getStringPrivateKey() {
-        return Numeric.toHexString( privateKey );
-    }
 }

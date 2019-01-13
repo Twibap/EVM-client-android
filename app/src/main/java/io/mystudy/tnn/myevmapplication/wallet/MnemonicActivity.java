@@ -11,6 +11,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.SecureRandom;
+
+import io.mystudy.tnn.myevmapplication.Application.Dlog;
 import io.mystudy.tnn.myevmapplication.R;
 
 public class MnemonicActivity extends AppCompatActivity implements View.OnClickListener {
@@ -27,12 +30,9 @@ public class MnemonicActivity extends AppCompatActivity implements View.OnClickL
 
         initView();
 
-//        mnemonicUtils = new Mnemonic(this);
-
-        address = new Address();
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
+        fab.callOnClick();
     }
 
     void initView(){
@@ -86,7 +86,8 @@ public class MnemonicActivity extends AppCompatActivity implements View.OnClickL
         switch (view.getId()){
             case R.id.fab:
 
-                address = new Address();
+                HDwallet wallet = new HDwallet( getMnemonic() );
+                address = new Address( wallet.getAddressKey(0) );
                 showDataToUI( address );
 
                 break;
@@ -95,24 +96,35 @@ public class MnemonicActivity extends AppCompatActivity implements View.OnClickL
 
     void showDataToUI(Address address){
         viewAddress.setText(address.getStringAddress());
-        viewPrivateKey.setText(address.getStringPrivateKey());
+//        viewPrivateKey.setText(address.getStringPrivateKey());
     }
 
-    void getMnemonic(){
-//        SecureRandom random = new SecureRandom();
-//        MnemonicUtils mnemonicUtils = new MnemonicUtils();
-//        byte[] walletSeed = new byte[16];   // 128 bits, 16 bytes
+    /**
+     * Mnemonic 단어를 생성해 출력한다.
+     * 단어를 생성하는데 사용한 Seed 를 반환한다.
+     * @return Seed
+     */
+    byte[] getMnemonic(){
+        SecureRandom random = new SecureRandom();
+        Mnemonic mnemonic = new Mnemonic(this);
 
         // Seed 얻기
-//        random.nextBytes(walletSeed);
+        byte[] seed = new byte[16];   // 128 bits 16 bytes
+        random.nextBytes( seed );
 
-//        String words = mnemonicUtils.generateMnemonic(walletSeed);
-//        Dlog.e(words);
+        String words = mnemonic.generateMnemonic( seed );
+        viewPrivateKey.setText( words );
+        Dlog.e(words);
+
+        // Mnemonic 단어의 hash를 HD 지갑의 seed로 사용한다.
+        seed = mnemonic.toSeed(words, null);
 
 //        String[] mnemonic_words = words.split(" ");
 
 //        for (int i = 0; i < mnemonic_views.length; i++) {
 //            mnemonic_views[i].setText( mnemonic_words[i] );
 //        }
+
+        return seed;
     }
 }
