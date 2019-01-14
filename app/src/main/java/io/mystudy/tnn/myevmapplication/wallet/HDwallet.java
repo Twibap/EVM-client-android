@@ -167,7 +167,7 @@ public class HDwallet {
         return ArrayUtils.concatByteArrays(bytes);
     }
     BigInteger parse256(byte[] bytes){
-        if ( bytes.length != 32 )
+        if ( bytes.length > 32 )
             throw new IllegalArgumentException("Wrong size of Argument");
 
         return new BigInteger( 1, bytes);

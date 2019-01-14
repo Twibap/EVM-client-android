@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EVM - Ethereum Vending Machine</string>
+    <string name="app_name">EVM</string>
 
     <!--<string name="url_price_websocket">ws://192.168.0.5:8080</string>-->
     <string name="url_price">13.124.23.199</string>
@@ -42,8 +42,15 @@
     <string name="title_address">Account</string>
     <string name="title_address_change">Account change</string>
     <string name="title_activity_mk_wallet">MkWalletActivity</string>
-    <string name="address_description">지갑 주소는 이더리움을 송금받기 위한 정보입니다. 다른 사람에게 이더리움을 받으려면 지갑 주소를 전달하세요.</string>
-    <string name="private_key_description">개인 키는 지갑에 저장된 이더리움을 사용할 수 있는 중요한 데이터입니다. 분실하거나 도난당하지 않도록 주의하십시오. 이 화면을 지나면 다시는 확인할 수 없습니다.</string>
+    <string name="address_description">
+        지갑 주소는 이더리움을 송금받기 위한 정보입니다.
+        다른 사람에게 이더리움을 받으려면 지갑 주소를 알려주세요.
+    </string>
+    <string name="private_key_description">
+        EVM에서는 사용자들의 정보를 수집하지 않습니다.
+        이 화면을 지나면 다시는 확인할 수 없기 때문에 안전하게 보관하십시오.
+        분실하거나 다른 사람이 알지 못하게 주의해야합니다.
+    </string>
     <string name="title_activity_manual">ManualActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>

@@ -1,5 +1,8 @@
 package io.mystudy.tnn.myevmapplication.wallet;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,7 +24,8 @@ public class MnemonicActivity extends AppCompatActivity implements View.OnClickL
     Address address;
 
     TextView viewAddress;
-    TextView viewPrivateKey;
+    TextView viewMnemonic;
+    TextView btCopy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +45,9 @@ public class MnemonicActivity extends AppCompatActivity implements View.OnClickL
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewAddress = findViewById(R.id.view_address);
-        viewPrivateKey = findViewById(R.id.view_key);
+        viewMnemonic = findViewById(R.id.view_mnemonic_words);
+        btCopy = findViewById(R.id.button_copy);
+        btCopy.setOnClickListener(this);
     }
 
     @Override
@@ -91,6 +97,13 @@ public class MnemonicActivity extends AppCompatActivity implements View.OnClickL
                 showDataToUI( address );
 
                 break;
+
+            case R.id.button_copy:  // Mnemonic words를 클립보드에 복사한다.
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("EVM", viewMnemonic.getText());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(this, "클립보드에 복사되었습니다.", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
@@ -113,16 +126,18 @@ public class MnemonicActivity extends AppCompatActivity implements View.OnClickL
         random.nextBytes( seed );
 
         String words = mnemonic.generateMnemonic( seed );
-        viewPrivateKey.setText( words );
         Dlog.e(words);
 
         // Mnemonic 단어의 hash를 HD 지갑의 seed로 사용한다.
         seed = mnemonic.toSeed(words, null);
 
+        viewMnemonic.setText(words);
 //        String[] mnemonic_words = words.split(" ");
 
-//        for (int i = 0; i < mnemonic_views.length; i++) {
-//            mnemonic_views[i].setText( mnemonic_words[i] );
+//        GridLayout gridLayout = findViewById(R.id.layout_words);
+//        for (int i = 0; i < gridLayout.getChildCount(); i++) {
+//            TextView textview = (TextView) gridLayout.getChildAt(i);
+//            textview.setText( mnemonic_words[i] );
 //        }
 
         return seed;

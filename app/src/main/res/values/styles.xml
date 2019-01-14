@@ -13,6 +13,7 @@
         <item name="android:textColorSecondaryInverse">@color/secondaryTextInverseColor</item>
         <!--<item name="colorControlNormal">@color/colorControlNormal</item>-->
         <!--<item name="colorControlHighlight">@color/colorControlHighlight</item>-->
+        <item name="android:typeface">monospace</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
