@@ -17,6 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import io.mystudy.tnn.myevmapplication.Application.BaseApplication;
 import io.mystudy.tnn.myevmapplication.Application.Confidential;
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup btGroup;
     private Button btBuy;
 
+    private NumberFormat priceFormat;
     private TextView viewPrice;
     private int amount;
 
@@ -81,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        priceFormat = NumberFormat.getCurrencyInstance(Locale.KOREA);
+
         Request request = new Request.Builder()
                 .url( BaseApplication.getHost_websocket() )
                 .build();
@@ -91,7 +97,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         price = _price;
-                        viewPrice.setText( "￦ "+_price.getEvm_price()+" / Ether" );
+                        String formattedPrice = priceFormat.format( price.getEvm_price() );
+                        String strPrice = formattedPrice.replace(priceFormat.getCurrency().getSymbol(),
+                                priceFormat.getCurrency().getSymbol()+" ");
+                        strPrice += " / Ether";
+                        viewPrice.setText(strPrice);
                     }
                 });
             }
