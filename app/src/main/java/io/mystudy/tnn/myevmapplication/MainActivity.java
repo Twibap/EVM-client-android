@@ -3,11 +3,10 @@ package io.mystudy.tnn.myevmapplication;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -54,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
     private WebSocket webSocket;
     private PriceListener priceListener;
     private PriceListener.Price price;
+
+    private ChoiceViewPager choicePager;
+    private ChoicePagerAdapter choicePagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,70 +129,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void viewInit(){
-        btGroup = findViewById(R.id.chooseGroup);
-        btBuy = findViewById(R.id.buttonBuy);
+//        btGroup = findViewById(R.id.chooseGroup);
+//        btBuy = findViewById(R.id.buttonBuy);
 
         viewPrice = findViewById(R.id.view_price_body);
         viewAddress = findViewById(R.id.item_body_account);
 
-        btGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                // RadioGroup -> ConstraintLayout -> ToggleButton
-                for(int j = 0; j < ((ConstraintLayout)btGroup.getChildAt(0)).getChildCount(); j++){
-                    ToggleButton view = (ToggleButton) ((ConstraintLayout) radioGroup.getChildAt(0)).getChildAt(j);
-                    view.setChecked( view.getId() == i );   // true
-                }
-            }
-        });
+//        btGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+//                // RadioGroup -> ConstraintLayout -> ToggleButton
+//                for(int j = 0; j < ((ConstraintLayout)btGroup.getChildAt(0)).getChildCount(); j++){
+//                    ToggleButton view = (ToggleButton) ((ConstraintLayout) radioGroup.getChildAt(0)).getChildAt(j);
+//                    view.setChecked( view.getId() == i );   // true
+//                }
+//            }
+//        });
+//
+//        btBuy.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if( btGroup.getCheckedRadioButtonId() != -1)
+//                    onClick_request(view);
+//                else Toast.makeText(MainActivity.this, "결제 금액을 선택하세요", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
-        btBuy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if( btGroup.getCheckedRadioButtonId() != -1)
-                    onClick_request(view);
-                else Toast.makeText(MainActivity.this, "결제 금액을 선택하세요", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+        choicePagerAdapter = new ChoicePagerAdapter( this );
+        choicePager = findViewById(R.id.choice_purchase_amount);
+        choicePager.setAdapter( choicePagerAdapter );
 
-    // activity_main.xml 의 ToggleButton 에서 호출된다
-    public void onToggle(View view) {   // view 클릭된 다음 상태로 전달된다.
-        // RadioGroup -> ConstraintLayout -> ToggleButton
-        ToggleButton theView = (ToggleButton) view;
-        RadioGroup radioGroup = (RadioGroup) theView.getParent().getParent();
-
-        if( theView.isChecked() ){
-            radioGroup.check( view.getId() );
-            amount = buttonId2Val( view.getId() );
-        } else {
-            radioGroup.clearCheck();
-            amount = -1;
-        }
-
-        Toast.makeText(this, ((ToggleButton)view).getTextOn() , Toast.LENGTH_SHORT).show();
+        // 다음 페이지 보이게 하기
+        // 출처: http://kkensu.tistory.com/2 [철스토리]
+        int dp = 10; // DP 단위로 변환
+        dp = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+        choicePager.setPageMargin( dp );
     }
 
     public void toggleClear(){
         btGroup.clearCheck();
-    }
-
-    public int buttonId2Val(int id){
-        switch (id){
-            case R.id.choose11000:
-                return 11000;
-            case R.id.choose22000:
-                return 22000;
-            case R.id.choose33000:
-                return 33000;
-            case R.id.choose55000:
-                return 55000;
-            case R.id.choose110000:
-                return 110000;
-            default:
-                return -1;
-        }
-
     }
 
     public void onClick_request(View v) {

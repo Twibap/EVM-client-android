@@ -63,5 +63,8 @@
     <string name="msg_history_looking">Looking for history</string>
     <string name="msg_history_no">No history</string>
     <string name="msg_history_no_more">No more history</string>
+    
+    <string name="card_purchase_amount">%1$s Ether</string>
+    <string name="card_purchase">Buy</string>
 
 </resources>
