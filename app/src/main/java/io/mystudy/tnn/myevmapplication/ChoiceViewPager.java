@@ -46,4 +46,5 @@ class ChoiceViewPager extends ViewPager implements ViewPager.PageTransformer {
         }
     }
 
+
 }

@@ -23,7 +23,8 @@ public class ChoicePagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return ChoiceHolderFragment.newInstance( choice[ position ] );
+//        return ChoiceHolderFragment.newInstance( choice[ position ] );
+        return ChoiceHolderFragment.newInstance( position , choice[position] );
     }
 
     @Override
