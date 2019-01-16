@@ -5,13 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,11 +17,10 @@ import java.util.Locale;
 import io.mystudy.tnn.myevmapplication.Application.BaseApplication;
 import io.mystudy.tnn.myevmapplication.Application.Confidential;
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
-import io.mystudy.tnn.myevmapplication.Vending.Order;
 import io.mystudy.tnn.myevmapplication.manual.ManualActivity;
-import io.mystudy.tnn.myevmapplication.task.PaymentTask;
 import io.mystudy.tnn.myevmapplication.wallet.AccountActivity;
 import io.mystudy.tnn.myevmapplication.wallet.AddressUtils;
+import io.mystudy.tnn.myevmapplication.websocket.Price;
 import io.mystudy.tnn.myevmapplication.websocket.PriceListener;
 import kr.co.bootpay.BootpayAnalytics;
 import okhttp3.OkHttpClient;
@@ -37,12 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int codeMkAddress = 1001;
 
-    private RadioGroup btGroup;
-    private Button btBuy;
-
     private NumberFormat priceFormat;
     private TextView viewPrice;
-    private int amount;
 
     private TextView viewAddress;
     private String address;
@@ -51,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private OkHttpClient httpClient;
     private WebSocket webSocket;
     private PriceListener priceListener;
-    private PriceListener.Price price;
 
     private ChoiceViewPager choicePager;
     private ChoicePagerAdapter choicePagerAdapter;
@@ -65,12 +55,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarMainActivity);
         setSupportActionBar( toolbar );
 
+        // 저장된 사용자 주소 가져오기 TODO BaseApplication의 생명 주기에 맞추기
         SharedPreferences sf = getSharedPreferences("Customer", MODE_PRIVATE);
         if( !sf.contains("account") ){
             Intent intent = new Intent(this, ManualActivity.class);
             startActivityForResult(intent, codeMkAddress);
         } else {
              address = sf.getString("account", null);
+            ((BaseApplication) getApplicationContext()).setAddress( address );
         }
 
         viewInit();
@@ -93,12 +85,13 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         priceListener= new PriceListener() {
             @Override
-            public void showMessage(final PriceListener.Price _price) {
+            public void showMessage(final Price _price) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        price = _price;
-                        String formattedPrice = priceFormat.format( price.getEvm_price() );
+                        ((BaseApplication) getApplicationContext()).setEtherPrice(_price);
+
+                        String formattedPrice = priceFormat.format( _price.getEvm_price() );
                         String strPrice = formattedPrice.replace(priceFormat.getCurrency().getSymbol(),
                                 priceFormat.getCurrency().getSymbol()+" ");
                         strPrice += " / Ether";
@@ -129,31 +122,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void viewInit(){
-//        btGroup = findViewById(R.id.chooseGroup);
-//        btBuy = findViewById(R.id.buttonBuy);
 
         viewPrice = findViewById(R.id.view_price_body);
         viewAddress = findViewById(R.id.item_body_account);
-
-//        btGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-//                // RadioGroup -> ConstraintLayout -> ToggleButton
-//                for(int j = 0; j < ((ConstraintLayout)btGroup.getChildAt(0)).getChildCount(); j++){
-//                    ToggleButton view = (ToggleButton) ((ConstraintLayout) radioGroup.getChildAt(0)).getChildAt(j);
-//                    view.setChecked( view.getId() == i );   // true
-//                }
-//            }
-//        });
-//
-//        btBuy.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if( btGroup.getCheckedRadioButtonId() != -1)
-//                    onClick_request(view);
-//                else Toast.makeText(MainActivity.this, "결제 금액을 선택하세요", Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
         choicePagerAdapter = new ChoicePagerAdapter( this );
         choicePager = findViewById(R.id.choice_purchase_amount);
@@ -165,32 +136,6 @@ public class MainActivity extends AppCompatActivity {
         dp = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
         choicePager.setPageMargin( dp );
-    }
-
-    public void toggleClear(){
-        btGroup.clearCheck();
-    }
-
-    public void onClick_request(View v) {
-        if(amount <= 0) {
-            Dlog.e("onClick_request: Zero Price");
-            return;
-        }
-
-        SharedPreferences sf = getSharedPreferences("Customer", MODE_PRIVATE);
-        String token = null;
-        if(sf.contains("firebaseToken"))
-            token = sf.getString("firebaseToken", null);
-
-
-        // 주문내용 생성
-        Order order = new Order( address, token, amount, price.getId());
-        Log.i(TAG, "onClick_request: order->"+order.toJson());
-
-        // 주문번호 생성(서버 저장)
-        PaymentTask task = new PaymentTask(this);
-        task.execute(order);
-
     }
 
     @Override
@@ -225,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
             case codeMkAddress:
                 address = data.getStringExtra("account");
                 address = AddressUtils.toChecksumAddress(address);
+                ((BaseApplication) getApplicationContext()).setAddress( address );
 
                 Toast.makeText(this,  address, Toast.LENGTH_SHORT).show();
                 break;

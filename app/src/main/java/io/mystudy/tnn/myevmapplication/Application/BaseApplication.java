@@ -17,6 +17,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 import io.mystudy.tnn.myevmapplication.R;
+import io.mystudy.tnn.myevmapplication.websocket.Price;
 
 public class BaseApplication extends Application {
     public static boolean DEBUG = false;
@@ -28,6 +29,12 @@ public class BaseApplication extends Application {
 
     private NotificationManagerCompat mNotificationManagerCompat;
     boolean areNotificationsEnabled;
+
+    // 사용자 정보
+    private String address;
+
+    // 이더 시세
+    private Price etherPrice;
 
     @Override
     public void onCreate() {
@@ -125,5 +132,21 @@ public class BaseApplication extends Application {
         intent.putExtra("app_package", getPackageName());
         intent.putExtra("app_uid", getApplicationInfo().uid);
         startActivity(intent);
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setEtherPrice(Price etherPrice) {
+        this.etherPrice = etherPrice;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public Price getEtherPrice() {
+        return etherPrice;
     }
 }

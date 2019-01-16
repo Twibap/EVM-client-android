@@ -1,5 +1,6 @@
 package io.mystudy.tnn.myevmapplication;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,13 @@ import android.widget.Toast;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+
+import io.mystudy.tnn.myevmapplication.Application.BaseApplication;
+import io.mystudy.tnn.myevmapplication.Vending.Order;
+import io.mystudy.tnn.myevmapplication.task.PaymentTask;
+import io.mystudy.tnn.myevmapplication.websocket.Price;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ChoiceHolderFragment extends Fragment implements View.OnClickListener {
 
@@ -71,6 +79,12 @@ public class ChoiceHolderFragment extends Fragment implements View.OnClickListen
         if (pager.getCurrentItem() == position ){
             String toastMsg = choicedPrice + "원 선택됨";
             Toast.makeText(getContext(), toastMsg, Toast.LENGTH_SHORT).show();
+
+            BaseApplication application = ((BaseApplication) getContext().getApplicationContext());
+            String address = application.getAddress();
+            Price price = application.getEtherPrice();
+
+            mkOrder( address, choicedPrice, price);
         } else {
             pager.setCurrentItem( position , true);
         }
@@ -85,5 +99,26 @@ public class ChoiceHolderFragment extends Fragment implements View.OnClickListen
                 priceFormat.getCurrency().getSymbol()+" "
         );
         return formatted;
+    }
+
+    /**
+     * 구매 주문을 서버로 전송한다.
+     * @param address 이더 받을 주소
+     * @param amount 구입 금액
+     * @param price 현재 이더 시세
+     */
+    public void mkOrder(String address, int amount, Price price) {
+        SharedPreferences sf = getContext().getSharedPreferences("Customer", MODE_PRIVATE);
+        String token = null;
+        if(sf.contains("firebaseToken"))
+            token = sf.getString("firebaseToken", null);
+
+        // 주문내용 생성
+        Order order = new Order( address, token, amount, price.getId());
+
+        // 주문 전송
+        PaymentTask task = new PaymentTask( getContext() );
+        task.execute(order); // 전송 후 결제 진행
+
     }
 }

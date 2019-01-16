@@ -1,5 +1,8 @@
 package io.mystudy.tnn.myevmapplication.task;
 
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -10,7 +13,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-import io.mystudy.tnn.myevmapplication.MainActivity;
+import io.mystudy.tnn.myevmapplication.Application.Dlog;
 import io.mystudy.tnn.myevmapplication.Vending.Bill;
 import io.mystudy.tnn.myevmapplication.Vending.Order;
 import io.mystudy.tnn.myevmapplication.Vending.OrderRepository;
@@ -23,13 +26,15 @@ import kr.co.bootpay.ErrorListener;
 import kr.co.bootpay.enums.Method;
 import kr.co.bootpay.enums.PG;
 
-import static android.content.ContentValues.TAG;
-
 public class PaymentTask extends AsyncTask<Order, Order, Order>{
-    private WeakReference<MainActivity> activityReference;
 
-    public PaymentTask(MainActivity context){
-        activityReference = new WeakReference<>(context);
+    private WeakReference<Context> contextReference;
+    private FragmentManager fragmentManager;
+
+    public PaymentTask(Context context){
+        contextReference = new WeakReference<>(context);
+        this.fragmentManager = ((Activity) context).getFragmentManager();
+
     }
 
     @Override
@@ -45,17 +50,18 @@ public class PaymentTask extends AsyncTask<Order, Order, Order>{
 
     @Override
     protected void onPostExecute(Order order) {
-//                super.onPostExecute(order);
         if( order == null ){
-            Log.e(TAG, "onPostExecute: order is null");
             return;
         }
         // get a reference to the activity if it is still there
-        final MainActivity activity = activityReference.get();
-        if (activity == null || activity.isFinishing()) return;
+        // 메모리 누수 방지 및
+        // 주문 번호 수령 후 결제 단계 사이에 어플이 종료되면
+        // 결제 단계를 진행하지 않는다.
+        final Context context = contextReference.get();
+        if (context == null || ((Activity) context).isFinishing()) return;
 
         // 결제호출
-        Bootpay.init( activity.getFragmentManager())
+        Bootpay.init( fragmentManager )
                 .setApplicationId("5bddbed2b6d49c480275bab1") // 해당 프로젝트(안드로이드)의 application id 값
                 .setPG(PG.KAKAO) // 결제할 PG 사
                 //.setUserPhone("010-1234-5678") // 구매자 전화번호
@@ -87,21 +93,21 @@ public class PaymentTask extends AsyncTask<Order, Order, Order>{
                 .onCancel(new CancelListener() { // 결제 취소시 호출
                     @Override
                     public void onCancel(@Nullable String message) {
-                        activity.toggleClear();
-                        Toast.makeText(activity, "결제가 취소되었습니다.", Toast.LENGTH_SHORT).show();
-                        Log.d("cancel", message);
+                        Toast.makeText(context, "결제가 취소되었습니다.", Toast.LENGTH_SHORT).show();
+                        Dlog.e("Payment canceled : "+message);
                     }
                 })
                 .onError(new ErrorListener() { // 에러가 났을때 호출되는 부분
                     @Override
                     public void onError(@Nullable String message) {
-                        Log.d("error", message);
+                        Toast.makeText(context, "결제에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                        Dlog.e("Payment error : "+message);
                     }
                 })
                 .onClose(new CloseListener() { //결제창이 닫힐때 실행되는 부분
                     @Override
                     public void onClose(String message) {
-                        Log.d("close", "close");
+                        Dlog.e("Payment closed : "+message);
                     }
                 })
                 .show();
