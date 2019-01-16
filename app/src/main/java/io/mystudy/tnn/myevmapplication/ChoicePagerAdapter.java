@@ -1,30 +1,35 @@
 package io.mystudy.tnn.myevmapplication;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v7.app.AppCompatActivity;
+
+import org.web3j.utils.Convert;
+
+import java.math.BigInteger;
+
+import io.mystudy.tnn.myevmapplication.websocket.Price;
 
 /**
  * MainActivity의 구입 선택지를 전시하는 ViewPager에 데이터를 관리한다.
  */
 public class ChoicePagerAdapter extends FragmentPagerAdapter {
 
-    private final int[] choice = { 11000, 22000, 33000, 55000, 110000 };
+    private final int[] choice = { 10000, 20000, 30000, 50000, 100000 };
     private final String[] amount = new String[ choice.length ];
 
-    Context context;
+    private final FragmentManager fragmentManager;
 
-    ChoicePagerAdapter(Context context){
-        super( ((AppCompatActivity) context).getSupportFragmentManager() );
-        this.context = context;
+    ChoicePagerAdapter(FragmentManager fm){
+        super( fm );
+        this.fragmentManager = fm;
     }
 
 
     @Override
     public Fragment getItem(int position) {
-//        return ChoiceHolderFragment.newInstance( choice[ position ] );
-        return ChoiceHolderFragment.newInstance( position , choice[position] );
+        Fragment fragment = ChoiceHolderFragment.newInstance( position , choice[position], amount[position]);
+        return fragment;
     }
 
     @Override
@@ -44,5 +49,41 @@ public class ChoicePagerAdapter extends FragmentPagerAdapter {
             return (0.95f);
         else
             return (0.9f);
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        // Fragment에 데이터 업데이트 하기
+        for (int i = 0; i < choice.length; i++) {
+            String choicePageTag
+                    = "android:switcher:"
+                    + R.id.choice_purchase_amount+":"
+                    + getItemId(i); // int->long
+            ChoiceHolderFragment page = (ChoiceHolderFragment) fragmentManager
+                    .findFragmentByTag( choicePageTag );
+
+            if (page != null)
+                page.updateBody(amount[i]);
+        }
+
+        super.notifyDataSetChanged();
+    }
+
+    void updateEtherPrice(Price price){
+        int etherPrice = price.getEvm_price();
+        for (int i = 0; i < choice.length; i++) {
+            amount[i] = getEtherAmount( choice[i], etherPrice );
+        }
+
+        notifyDataSetChanged();
+    }
+
+    private String getEtherAmount(int choicePrice, int etherPrice){
+        BigInteger unitEther = BigInteger.TEN.pow( 18 );
+        BigInteger weiFromPrice = BigInteger.valueOf( etherPrice );
+        BigInteger choice = BigInteger.valueOf( choicePrice ).multiply( unitEther );
+
+        String result = choice.divide( weiFromPrice ).toString();
+        return Convert.fromWei( result, Convert.Unit.ETHER ).toString();
     }
 }

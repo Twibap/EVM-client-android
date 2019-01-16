@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         ((BaseApplication) getApplicationContext()).setEtherPrice(_price);
 
+                        choicePagerAdapter.updateEtherPrice(_price);
+
                         String formattedPrice = priceFormat.format( _price.getEvm_price() );
                         String strPrice = formattedPrice.replace(priceFormat.getCurrency().getSymbol(),
                                 priceFormat.getCurrency().getSymbol()+" ");
@@ -126,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         viewPrice = findViewById(R.id.view_price_body);
         viewAddress = findViewById(R.id.item_body_account);
 
-        choicePagerAdapter = new ChoicePagerAdapter( this );
+        choicePagerAdapter = new ChoicePagerAdapter( getSupportFragmentManager() );
         choicePager = findViewById(R.id.choice_purchase_amount);
         choicePager.setAdapter( choicePagerAdapter );
 

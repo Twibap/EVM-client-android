@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -26,24 +25,26 @@ public class ChoiceHolderFragment extends Fragment implements View.OnClickListen
 
     private static final String ARG_CHOICE_PRICE = "choice_price";
     private static final String ARG_SELECTION_NUMBER = "selection_number";
+    private static final String ARG_ETHER_AMOUNT = "ether_amount";
 
     private static NumberFormat priceFormat = NumberFormat.getCurrencyInstance( Locale.KOREA );
 
-    int choicedPrice;
-    String etherAmount;
+    private int choicedPrice;
+    private String etherAmount;
 
-    TextView titleView;
-    TextView bodyView;
-    Button buyButton;
+    private TextView titleView;
+    private TextView bodyView;
+    private Button buyButton;
 
     public ChoiceHolderFragment() {
     }
 
-    public static ChoiceHolderFragment newInstance(int position, int choicedPrice){
+    public static ChoiceHolderFragment newInstance(int position, int choicedPrice, String etherAmount){
         ChoiceHolderFragment fragment = new ChoiceHolderFragment();
         Bundle arguments = new Bundle();
         arguments.putInt( ARG_SELECTION_NUMBER, position);
         arguments.putInt( ARG_CHOICE_PRICE, choicedPrice);
+        arguments.putString( ARG_ETHER_AMOUNT, etherAmount);
         fragment.setArguments( arguments );
         return fragment;
     }
@@ -62,9 +63,12 @@ public class ChoiceHolderFragment extends Fragment implements View.OnClickListen
 
         // get data
         choicedPrice = getArguments().getInt( ARG_CHOICE_PRICE );
+        etherAmount = getArguments().getString( ARG_ETHER_AMOUNT );
 
         // set data
         titleView.setText( moneyFormat( choicedPrice ) );
+        String bodyMsg = String.format( getString(R.string.card_purchase_amount), etherAmount);
+        bodyView.setText( bodyMsg );
 
         return rootView;
     }
@@ -77,8 +81,6 @@ public class ChoiceHolderFragment extends Fragment implements View.OnClickListen
 
         // 옆에 살짝 보이는 다음 화면 버튼 누를 경우 해당 View로 이동
         if (pager.getCurrentItem() == position ){
-            String toastMsg = choicedPrice + "원 선택됨";
-            Toast.makeText(getContext(), toastMsg, Toast.LENGTH_SHORT).show();
 
             BaseApplication application = ((BaseApplication) getContext().getApplicationContext());
             String address = application.getAddress();
@@ -88,8 +90,6 @@ public class ChoiceHolderFragment extends Fragment implements View.OnClickListen
         } else {
             pager.setCurrentItem( position , true);
         }
-
-//        int choicedPrice = getArguments().getInt( ARG_CHOICE_PRICE );
     }
 
     String moneyFormat(int money){
@@ -120,5 +120,10 @@ public class ChoiceHolderFragment extends Fragment implements View.OnClickListen
         PaymentTask task = new PaymentTask( getContext() );
         task.execute(order); // 전송 후 결제 진행
 
+    }
+
+    void updateBody(String body){
+        String bodyMsg = String.format( getString(R.string.card_purchase_amount), body);
+        bodyView.setText( bodyMsg );
     }
 }
