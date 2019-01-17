@@ -121,9 +121,20 @@ public class OrderRepository {
         OkHttpClient client = new OkHttpClient();
 
         Response response = client.newCall(request).execute();
-        Gson gson = new Gson();
+        Order result;
 
-        return gson.fromJson(response.body().string(), Order.class);
+        int status = response.code();
+        if (status == 202){
+            Gson gson = new Gson();
+            result = gson.fromJson(response.body().string(), Order.class);
+            result.setStatus( status );
+        } else {
+            // Error 전달
+            result = order;
+            result.setStatus( status );
+            result.setErrMsg(response.body().string());
+        }
+        return result;
     }
 
     public String verifyPayment(Bill bill) throws IOException {

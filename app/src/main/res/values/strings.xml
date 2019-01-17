@@ -67,4 +67,7 @@
     <string name="card_purchase_amount">%1$s Ether</string>
     <string name="card_purchase">Buy</string>
 
+    <string name="err_order_title">주문 실패</string>
+    <string name="err_order_limit_exceeded">일일 구입 한도를 초과하였습니다.</string>
+
 </resources>

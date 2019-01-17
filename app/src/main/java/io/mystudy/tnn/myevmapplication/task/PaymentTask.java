@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
+import io.mystudy.tnn.myevmapplication.R;
 import io.mystudy.tnn.myevmapplication.Vending.Bill;
 import io.mystudy.tnn.myevmapplication.Vending.Order;
 import io.mystudy.tnn.myevmapplication.Vending.OrderRepository;
@@ -50,15 +52,21 @@ public class PaymentTask extends AsyncTask<Order, Order, Order>{
 
     @Override
     protected void onPostExecute(Order order) {
-        if( order == null ){
-            return;
-        }
         // get a reference to the activity if it is still there
         // 메모리 누수 방지 및
         // 주문 번호 수령 후 결제 단계 사이에 어플이 종료되면
         // 결제 단계를 진행하지 않는다.
         final Context context = contextReference.get();
         if (context == null || ((Activity) context).isFinishing()) return;
+
+        if( order.getStatus() != 202){
+            new AlertDialog.Builder( context )
+                    .setTitle( context.getResources().getString(R.string.err_order_title))
+                    .setMessage( context.getResources().getString(R.string.err_order_limit_exceeded))
+                    .setPositiveButton("확인", null)
+                    .create().show();
+            return;
+        }
 
         // 결제호출
         Bootpay.init( fragmentManager )

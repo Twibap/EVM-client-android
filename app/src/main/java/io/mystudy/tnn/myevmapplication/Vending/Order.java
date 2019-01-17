@@ -30,6 +30,9 @@ public class Order {
     private String tx_hash;     // 이더 발행 Transaction hash
     private String bk_hash;     // tx_hash가 포함된 Block hash
 
+    private int status;
+    private String errMsg;
+
     public Order(String _address,
                  String _token,
                  int _amount,
@@ -99,5 +102,21 @@ public class Order {
 
     public String getBk_hash() {
         return bk_hash;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public String getErrMsg() {
+        return errMsg;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void setErrMsg(String errMsg) {
+        this.errMsg = errMsg;
     }
 }
