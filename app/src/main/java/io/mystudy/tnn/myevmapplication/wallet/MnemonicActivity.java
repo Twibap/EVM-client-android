@@ -3,9 +3,12 @@ package io.mystudy.tnn.myevmapplication.wallet;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -20,7 +23,7 @@ import java.security.SecureRandom;
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
 import io.mystudy.tnn.myevmapplication.R;
 
-public class MnemonicActivity extends AppCompatActivity implements View.OnClickListener {
+public class MnemonicActivity extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnClickListener {
 
     Address address;
 
@@ -67,14 +70,14 @@ public class MnemonicActivity extends AppCompatActivity implements View.OnClickL
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_ok_mnemonic:
-                // Account 생성 후 주소 저장
-                Intent intent = getIntent();
-                intent.putExtra("account", address.getStringAddress());
-
-                Toast.makeText(this, "주소가 생성되었습니다.", Toast.LENGTH_SHORT).show();
-
-                setResult(RESULT_OK, intent);
-                finish();
+                // Mnemonic words 재확인 불가 경고
+                new AlertDialog.Builder(this)
+                        .setTitle( getResources().getString(R.string.alert_mnemonic_title))
+                        .setMessage( getResources().getString(R.string.alert_mnemonic_body))
+                        .setCancelable(false)
+                        .setPositiveButton("다시 확인하기", null)
+                        .setNeutralButton("확인", this)
+                        .create().show();
                 break;
 
             case android.R.id.home:
@@ -142,5 +145,22 @@ public class MnemonicActivity extends AppCompatActivity implements View.OnClickL
 //        }
 
         return seed;
+    }
+
+    // Mnemonic words 재확인 불가 경고 후
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        // Account 생성 후 주소 전달
+        Intent intent = getIntent();
+        intent.putExtra("account", address.getStringAddress());
+
+        // 저장
+        SharedPreferences sf = getSharedPreferences("Customer", MODE_PRIVATE);
+        sf.edit().putString("account", address.getStringAddress()).apply();
+
+        Toast.makeText(this, "주소가 생성되었습니다.", Toast.LENGTH_SHORT).show();
+
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

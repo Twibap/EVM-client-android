@@ -48,8 +48,11 @@
     </string>
     <string name="private_key_description">
         EVM에서는 사용자들의 정보를 수집하지 않습니다.
-        이 화면을 지나면 다시는 확인할 수 없기 때문에 안전하게 보관하십시오.
+        이 화면을 지나면 다시는 확인할 수 없습니다.
+        반드시 안전하게 보관하십시오.
         분실하거나 다른 사람이 알지 못하게 주의해야합니다.
+        \n
+        \n이 단어를 다른 지갑 프로그램에서 사용할 수 있습니다.
     </string>
     <string name="title_activity_manual">ManualActivity</string>
     <string name="action_settings">Settings</string>
@@ -69,5 +72,11 @@
 
     <string name="err_order_title">주문 실패</string>
     <string name="err_order_limit_exceeded">일일 구입 한도를 초과하였습니다.</string>
+
+    <string name="alert_mnemonic_title">!!!경고!!!</string>
+    <string name="alert_mnemonic_body">
+        이 화면을 지나면 백업 단어를 두번 다시 확인할 수 없습니다.\n
+        \n안전하게 보관하셨습니까?
+    </string>
 
 </resources>
