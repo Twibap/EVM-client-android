@@ -1,12 +1,10 @@
 package io.mystudy.tnn.myevmapplication.manual;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.rd.PageIndicatorView;
@@ -134,17 +132,7 @@ public class ManualActivity extends AppCompatActivity implements ViewPager.OnPag
     public void finish() {
         SharedPreferences database = getSharedPreferences("Customer", MODE_PRIVATE);
         if( !database.contains("account") ) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
-            builder
-                    .setMessage("종료하시겠습니까?")
-                    .setPositiveButton("네", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            finishAffinity();
-                        }
-                    })
-                    .setNegativeButton("아니오", null)
-                    .show();
+            finishAffinity();
         } else {
             super.finish();
         }
