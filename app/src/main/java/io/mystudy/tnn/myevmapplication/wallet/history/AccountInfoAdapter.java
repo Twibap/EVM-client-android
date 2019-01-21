@@ -9,6 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
 import io.mystudy.tnn.myevmapplication.R;
@@ -20,7 +22,7 @@ import io.mystudy.tnn.myevmapplication.Vending.OrderRepository;
  * 첫 두개 아이템은 각각 Address, Balance를 보여준다.
  * 이후 아이템은 구매 내역을 보여준다.
  */
-public class AccountInfoAdapter extends RecyclerView.Adapter {
+public class AccountInfoAdapter extends RecyclerView.Adapter implements OrderHistoryViewHolder.OnClickListener {
 
     private static final int VIEW_TYPE_ACCOUNT_INFO = 0;
     private static final int VIEW_TYPE_HEADLINE = 1;
@@ -39,6 +41,7 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
     private String mAddress;
     private String mBalance;
     private ArrayList<Order> mItems;
+    private ArrayList<Boolean> mItemIsClickedList;
     private OrderRepository.STATUS mRepositoryStatus = OrderRepository.STATUS.LOOKING_ORDER;
 
     private ProgressBar mProgressBar;
@@ -47,6 +50,10 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
         mItems = items;
         mProgressBar = progressBar;
         mProgressBar.setIndeterminate(true);
+
+        // 선택된 History 저장
+        mItemIsClickedList = new ArrayList<>( Arrays.asList( new Boolean[mItems.size()]));
+        Collections.fill( mItemIsClickedList, Boolean.FALSE );
     }
 
     /**
@@ -108,7 +115,7 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
             case VIEW_TYPE_HISTORY:
             default:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_purchase_history, parent, false);
-                return new OrderHistoryViewHolder( view );
+                return new OrderHistoryViewHolder( view, this);
         }
     }
 
@@ -158,13 +165,17 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
 
         if ( holder instanceof OrderHistoryViewHolder &&
                 mItems.size() > 0){
-            int history_position = position - (ACCOUNT_VIEW_COUNT+HEADER_VIEW_COUNT);
+            int history_position = getHistoryPosition( position );
             Order item = mItems.get(history_position);
             OrderHistoryViewHolder itemLayout = ((OrderHistoryViewHolder) holder);
 
             itemLayout.setPaymentAmount(item.getAmount());
             itemLayout.setDate(item.getOrdered_at());
             itemLayout.setGoodsAmount(item.getAmount_ether());
+
+            itemLayout.setVisibilityInfo( mItemIsClickedList.get(history_position) );
+            itemLayout.setTransaction(item.getTx_hash());
+            itemLayout.setBlock(item.getBk_hash());
 
             return;
         }
@@ -205,8 +216,15 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
     }
 
     public void addAll(ArrayList<Order> orders) {
-        if (orders != null)
+        if (orders != null){
             mItems.addAll( orders );
+
+            // 선택된 항목 저장공간 추가
+            ArrayList<Boolean> newIsClickedList =
+                    new ArrayList<>(Arrays.asList( new Boolean[ orders.size()] ));
+            Collections.fill(newIsClickedList, Boolean.FALSE);  // 초기화
+            mItemIsClickedList.addAll( newIsClickedList );
+        }
     }
 
     public void setStateMessage(OrderRepository.STATUS status){
@@ -226,4 +244,17 @@ public class AccountInfoAdapter extends RecyclerView.Adapter {
             mProgressBar.setVisibility(View.GONE);
     }
 
+    @Override
+    public void onClick(OrderHistoryViewHolder viewHolder) {
+        int item_position = viewHolder.getAdapterPosition();
+        int history_position = getHistoryPosition( item_position );
+        boolean isClicked = mItemIsClickedList.get( history_position );
+
+        viewHolder.setVisibilityInfo( !isClicked );
+        mItemIsClickedList.set(history_position, !isClicked);
+    }
+
+    int getHistoryPosition(int itemPosition){
+        return itemPosition - (ACCOUNT_VIEW_COUNT+HEADER_VIEW_COUNT);
+    }
 }

@@ -63,7 +63,9 @@ public class AccountActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // FCM Service에서 Activity를 실행한 경우 뒤로가기 버튼을 보여주지 않는다.
+        if ( !getIntent().getBooleanExtra("isFromService", false))
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle( getString(R.string.title_address));
 
         qrCodeView = findViewById(R.id.view_qr_code);
@@ -135,7 +137,9 @@ public class AccountActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.actionbar_account, menu);
+        // FCM Service에서 Activity를 실행한 경우 메뉴(주소 변경 기능)을 보여주지 않는다.
+        if ( !getIntent().getBooleanExtra("isFromService", false))
+            getMenuInflater().inflate(R.menu.actionbar_account, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

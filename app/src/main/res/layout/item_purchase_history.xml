@@ -8,6 +8,7 @@
     android:layout_margin="8dp"
     android:background="@color/textBoxOnSurface"
     android:padding="8dp"
+    android:id="@+id/item_layout_purchase_history"
     >
 
     <TextView
@@ -35,5 +36,35 @@
         android:text="YY/MM/DD"
         app:layout_constraintBaseline_toBaselineOf="@+id/item_title_purchase_history"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_body_purchase_history"/>
+
+    <include
+        android:id="@+id/item_include_layout_tx_info"
+        layout="@layout/item_purchase_history_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        />
+
+    <include
+        android:id="@+id/item_include_layout_block_info"
+        layout="@layout/item_purchase_history_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/item_include_layout_tx_info"
+        />
+
 
 </android.support.constraint.ConstraintLayout>

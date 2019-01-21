@@ -17,8 +17,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.util.Map;
 
 import io.mystudy.tnn.myevmapplication.Application.Dlog;
-import io.mystudy.tnn.myevmapplication.MainActivity;
 import io.mystudy.tnn.myevmapplication.R;
+import io.mystudy.tnn.myevmapplication.wallet.AccountActivity;
 
 public class EVM_FirebaseMessagingService extends FirebaseMessagingService {
 
@@ -129,9 +129,7 @@ public class EVM_FirebaseMessagingService extends FirebaseMessagingService {
 
 
         // 3. Set up main Intent for notification.
-        // TODO WalletActivity 추가 후 MainActivity를 지갑 화면으로 바꿀 것.
-        // TODO WalletActivity는 Special activity로 한다.
-        Intent notifyIntent = new Intent(this, MainActivity.class/* TODO WalletActivity.class */);
+        Intent notifyIntent = getIntent( data.get("address") );
 
         // When creating your Intent, you need to take into account the back state, i.e., what
         // happens after your Activity launches and the user presses the back button.
@@ -276,9 +274,7 @@ public class EVM_FirebaseMessagingService extends FirebaseMessagingService {
 
 
         // 3. Set up main Intent for notification.
-        // TODO WalletActivity 추가 후 MainActivity를 지갑 화면으로 바꿀 것.
-        // TODO WalletActivity는 Special activity로 한다.
-        Intent notifyIntent = new Intent(this, MainActivity.class/* TODO WalletActivity.class */);
+        Intent notifyIntent = getIntent(data.get("address"));
 
         // When creating your Intent, you need to take into account the back state, i.e., what
         // happens after your Activity launches and the user presses the back button.
@@ -398,6 +394,19 @@ public class EVM_FirebaseMessagingService extends FirebaseMessagingService {
 
         mNotificationManagerCompat.notify(NOTIFICATION_ID, notification);
 
+    }
+
+    /**
+     * AccountActivity로 이동하는 Intent를 생성한다.
+     * Intent에는 FCM에 포함된 이더 주문자 주소를 담는다.
+     * @param address
+     * @return
+     */
+    private Intent getIntent(String address){
+        Intent result = new Intent(this, AccountActivity.class);
+        result.putExtra("account", address);
+        result.putExtra("isFromService", true);
+        return result;
     }
 
 }

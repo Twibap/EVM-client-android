@@ -27,8 +27,8 @@ public class Order {
     private String price_id;    // 구입 이더 가격
     private String bill_id;     // 결제 정보
     private Date ordered_at;    // 주문 시점
-    private String tx_hash;     // 이더 발행 Transaction hash
-    private String bk_hash;     // tx_hash가 포함된 Block hash
+    private String txHash;     // 이더 발행 Transaction hash
+    private String bkHash;     // tx_hash가 포함된 Block hash
 
     private int status;
     private String errMsg;
@@ -97,11 +97,11 @@ public class Order {
     }
 
     public String getTx_hash() {
-        return tx_hash;
+        return txHash;
     }
 
     public String getBk_hash() {
-        return bk_hash;
+        return bkHash;
     }
 
     public int getStatus() {

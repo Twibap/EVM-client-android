@@ -79,4 +79,7 @@
         \n안전하게 보관하셨습니까?
     </string>
 
+    <string name="item_title_transaction">Transaction</string>
+    <string name="item_title_block">Block</string>
+
 </resources>
