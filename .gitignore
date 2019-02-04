@@ -18,7 +18,7 @@
 # Covers files to be ignored for android development using Android Studio.
 
 # Built application files
-# *.apk	# apk 배포를 위해 임시로 삭제
+*.apk
 *.ap_
 
 # Files for the ART/Dalvik VM
