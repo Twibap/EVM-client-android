@@ -34,7 +34,9 @@
     <io.mystudy.tnn.myevmapplication.ChoiceViewPager
         android:id="@+id/choice_purchase_amount"
         android:layout_width="match_parent"
-        android:layout_height="293dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:clipToPadding="false"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
@@ -42,7 +44,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_view_address"/>
+        app:layout_constraintTop_toBottomOf="@+id/layout_view_address"/>
     <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"/>-->
 
 </android.support.constraint.ConstraintLayout>
