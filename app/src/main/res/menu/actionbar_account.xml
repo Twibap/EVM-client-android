@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_account_change"
-        android:title="change"
+        android:title="@string/menu_text_action_account_change"
         app:showAsAction="always"
         />
 

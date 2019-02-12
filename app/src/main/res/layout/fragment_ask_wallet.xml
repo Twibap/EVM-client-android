@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
     tools:context=".manual.PlaceholderFragment"
     tools:layout_editor_absoluteY="81dp">
 
@@ -25,6 +26,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="이더리움 지갑을 가지고 있습니까?"
+        style="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintBottom_toTopOf="@+id/btNo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

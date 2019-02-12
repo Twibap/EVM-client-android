@@ -71,7 +71,7 @@ public class MnemonicActivity extends AppCompatActivity implements View.OnClickL
         switch (item.getItemId()){
             case R.id.action_ok_mnemonic:
                 // Mnemonic words 재확인 불가 경고
-                new AlertDialog.Builder(this)
+                new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog_Alert)
                         .setTitle( getResources().getString(R.string.alert_mnemonic_title))
                         .setMessage( getResources().getString(R.string.alert_mnemonic_body))
                         .setCancelable(false)

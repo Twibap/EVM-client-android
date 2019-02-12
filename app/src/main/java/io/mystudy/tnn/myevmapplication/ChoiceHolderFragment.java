@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.text.NumberFormat;
@@ -34,7 +34,7 @@ public class ChoiceHolderFragment extends Fragment implements View.OnClickListen
 
     private TextView titleView;
     private TextView bodyView;
-    private Button buyButton;
+    private ImageButton buyButton;
 
     public ChoiceHolderFragment() {
     }

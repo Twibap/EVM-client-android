@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    static final int TOTAL_PAGES = 2;
+    static final int TOTAL_PAGES = 3;
 
     SectionsPagerAdapter(FragmentManager fm) {
         super(fm);

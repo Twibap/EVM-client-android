@@ -18,6 +18,7 @@
         android:layout_height="200dp"
         android:background="#ffffff"
         android:contentDescription="@string/logo"
+        android:elevation="@dimen/actionbar_elevation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -41,6 +42,7 @@
             android:background="@color/textBoxOnSurface"
             android:orientation="vertical"
             android:padding="8dp"
+            android:textColorHint="@color/textHintColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -53,6 +55,7 @@
                 android:layout_marginTop="24dp"
                 android:ems="10"
                 android:hint="@string/addressFieldHint"
+                android:textColorHint="@color/textHintColor"
                 android:inputType="textPersonName"
                 />
 
@@ -62,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/AddressSaveCheckMsg"
+                style="@style/TextAppearance.AppCompat.Caption"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"

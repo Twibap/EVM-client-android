@@ -36,7 +36,9 @@
     <string name="AddressSaveCheckMsg">주소를 저장할까요?</string>
     <string name="logo">Logo</string>
     <string name="action_showAddress">주소 보기</string>
-    <string name="menu_text_action_account">주소 변경</string>
+    <string name="menu_text_action_account">Account</string>
+    <string name="menu_text_action_account_change">Change</string>
+    <string name="menu_text_action_ok">OK</string>
 
     <string name="title_main">Testnet - Ropsten</string>
     <string name="title_address">Account</string>
@@ -59,8 +61,9 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
     <string-array name="manual_msg">
-        <item>EVM을 다운로드 받아주셔서 감사합니다!!!\nEVM은 손쉽게 이더리움을 구입할 수 있는 서비스입니다.</item>
-        <item>이더리움을 구입하기 위해서는 지갑이 필요합니다.\n사용하고 있는 이더리움 지갑이 있습니까?</item>
+        <item>EVM을 다운로드 받아주셔서 감사합니다!!!\nEVM은 번거로운 절차 없이 쉽게 이더리움을 구입할 수 있는 서비스입니다.</item>
+        <item>KakaoPay를 이용해 이더리움을 구입해 보세요!\n\n※본 어플은 데모입니다. 실제 결제되지 않으며, 이더리움은 Ropsten 네트워크를 통해 송금됩니다.</item>
+        <item>이더리움을 구입하기 위해서는 이더리움을 보관할 지갑이 필요합니다.\n사용하고 있는 이더리움 지갑이 있습니까?</item>
     </string-array>
     <string name="title_activity_account">AccountActivity</string>
     <string name="msg_history_looking">Looking for history</string>

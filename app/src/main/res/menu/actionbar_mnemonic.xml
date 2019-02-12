@@ -4,8 +4,7 @@
 
     <item
         android:id="@+id/action_ok_mnemonic"
-        android:icon="@drawable/ic_action_check_white"
-        android:title="확인"
+        android:title="@string/menu_text_action_ok"
         app:showAsAction="always"
         />
 

@@ -14,8 +14,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.request.RequestOptions;
 
-import io.mystudy.tnn.myevmapplication.wallet.AccountChangeActivity;
 import io.mystudy.tnn.myevmapplication.R;
+import io.mystudy.tnn.myevmapplication.wallet.AccountChangeActivity;
 import io.mystudy.tnn.myevmapplication.wallet.MnemonicActivity;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -75,8 +75,13 @@ public class PlaceholderFragment extends Fragment implements View.OnClickListene
         } else {
             btYesHaveWallet.setVisibility(View.INVISIBLE);
             btNoHaveWallet.setVisibility(View.INVISIBLE);
-            Glide.with(this).load( getResources().getDrawable(R.drawable.wellcome_coin))
-                    .apply( RequestOptions.bitmapTransform(multi)).into(imageView);
+
+            if ( getArguments().getInt(ARG_SECTION_NUMBER) == 1 )
+                Glide.with(this).load( getResources().getDrawable(R.drawable.wellcome_coin))
+                        .apply( RequestOptions.bitmapTransform(multi)).into(imageView);
+            else {
+                Glide.with(this).load( getResources().getDrawable(R.drawable.payment_icon_yellow_large_kakao)).into( imageView );
+            }
 //            imageView.setImageBitmap( BitmapFactory.decodeResource(getResources(), R.drawable.wellcome_coin) );
         }
 
