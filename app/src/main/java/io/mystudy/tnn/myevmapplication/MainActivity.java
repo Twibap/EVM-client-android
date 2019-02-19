@@ -9,7 +9,6 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -173,8 +172,6 @@ public class MainActivity extends AppCompatActivity {
                 address = data.getStringExtra("account");
                 address = AddressUtils.toChecksumAddress(address);
                 ((BaseApplication) getApplicationContext()).setAddress( address );
-
-                Toast.makeText(this,  address, Toast.LENGTH_SHORT).show();
                 break;
         }
     }

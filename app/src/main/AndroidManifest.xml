@@ -21,6 +21,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -28,7 +29,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".wallet.AccountChangeActivity">
+        <activity android:name=".wallet.AccountChangeActivity"
+                  android:screenOrientation="portrait"
+            >
         </activity>
 
         <service android:name=".firebase.EVM_FirebaseMessagingService">
@@ -40,16 +43,19 @@
         <activity
             android:name=".wallet.MnemonicActivity"
             android:label="@string/title_activity_mk_wallet"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".manual.ManualActivity"
             android:label="@string/title_activity_manual"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:theme="@style/AppTheme.NoActionBar"
             android:name=".wallet.AccountActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_account">
         </activity>
     </application>
